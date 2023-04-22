@@ -1,0 +1,40 @@
+.btn {
+  padding: 1.5rem 3rem;
+  font-size: 1.8rem;
+  font-weight: 700;
+  display: inline-block;
+  @include borderRadius(0.6rem);
+  line-height: 1.1;
+  transition: all 0.3s ease;
+  &-dblue {
+    background: $dblue;
+    color: #fff;
+    &:hover {
+      color: $dblue;
+      background: #fff;
+    }
+  }
+  // btn btn-clear btn-clear-arrow
+  &-clear {
+    padding: 0;
+    background: transparent;
+    color: #fff;
+    &-arrow {
+      position: relative;
+      padding-right: 3rem;
+      span {
+        margin-left: 0.5rem;
+        transition: all 0.3s ease;
+        font-size: 1.4em;
+        position: absolute;
+        right: 0;
+        @include ver-center;
+      }
+      &:hover {
+        span {
+          right: -0.5rem;
+        }
+      }
+    }
+  }
+}

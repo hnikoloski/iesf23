@@ -1,0 +1,57 @@
+.tournament-admin-data {
+  form {
+    position: relative;
+    padding: 15px;
+    .form-group {
+      input,
+      label {
+        display: block;
+        &:not(.btn) {
+          margin: 5px;
+          width: 320px;
+          flex: 0 0 100%;
+        }
+      }
+    }
+    &.loading {
+      &::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(255, 255, 255, 0.5);
+        z-index: 999;
+        cursor: wait;
+      }
+    }
+    label {
+      display: block;
+      margin-bottom: 0.5em;
+      font-size: 1.2em;
+    }
+    .btn {
+      width: fit-content;
+      width: -moz-fit-content;
+      margin: 1em 0;
+      padding: 0.5em 1em;
+      font-size: 1.2em;
+      border-radius: 5px;
+      border: 1px solid #12171e;
+      background: #12171e;
+      color: #fff;
+      font-weight: 500;
+    }
+    .response-msg {
+      font-size: 2em;
+      margin-top: 1em;
+      &.success {
+        color: green;
+      }
+      &.error {
+        color: red;
+      }
+    }
+  }
+}

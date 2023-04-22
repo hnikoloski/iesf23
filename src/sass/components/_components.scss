@@ -1,0 +1,12 @@
+@import "./buttons";
+@import "./hero";
+@import "./preloader";
+@import "./hero-block";
+@import "./cta-section-block";
+@import "./_all-tournaments-block";
+
+.iesf-blocks {
+  &:not(.iesf-hero-block) {
+    margin-top: 7.5rem;
+  }
+}

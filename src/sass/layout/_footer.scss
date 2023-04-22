@@ -1,0 +1,23 @@
+footer.site-footer {
+  padding: 0 $sidePadding;
+  .site-info {
+    padding: 4rem 2.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    align-content: center;
+    justify-content: space-between;
+    border-bottom: 0.1rem solid rgba(229, 231, 235, 0.4);
+    .logo-wrapper {
+      width: 9.7rem;
+      height: auto;
+    }
+  }
+  .copy-bar {
+    padding: 1.5rem 0;
+    p {
+      font-size: 1.4rem;
+      color: rgba(229, 231, 235, 0.4);
+    }
+  }
+}

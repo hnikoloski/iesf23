@@ -1,0 +1,11 @@
+@import "./sass/editor/mixins";
+@import "./sass/helpers/variables";
+@import "./sass/editor/hero-block";
+@import "./sass/editor/all-tournaments-block";
+@import "./sass/editor/cta-section-block";
+.dashicons-iesf {
+  background: url("../../assets/images/iesf-logo.svg");
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+}

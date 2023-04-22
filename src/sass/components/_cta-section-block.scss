@@ -1,0 +1,52 @@
+.iesf-cta-section-block {
+  padding: 0 $sidePadding;
+  .wrapper {
+    background-image: var(--bgImg);
+    background-color: var(--bgColor);
+    @include bg-props(cover, center, no-repeat);
+    @include borderRadius(0.8rem);
+    min-height: 54rem;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    position: relative;
+    overflow: hidden;
+    &:before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: var(--bgImgOverlay);
+      z-index: 0;
+    }
+    .content {
+      padding: 8.4rem 6.5rem;
+      max-width: 50%;
+      position: relative;
+      z-index: 1;
+      h2 {
+        font-size: 4.2rem;
+        font-weight: 700;
+        color: var(--textColor);
+        margin-bottom: 2.4rem;
+        line-height: 1.2;
+      }
+      .description {
+        p {
+          color: var(--textColor);
+          font-size: 1.8rem;
+          font-weight: 400;
+          &:not(:last-of-type) {
+            margin-bottom: 1.6rem;
+          }
+        }
+      }
+      .btn {
+        margin-top: 3.2rem;
+        color: var(--textColor);
+      }
+    }
+  }
+}

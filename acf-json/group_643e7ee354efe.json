@@ -1,0 +1,43 @@
+{
+    "key": "group_643e7ee354efe",
+    "title": "Theme Settings",
+    "fields": [
+        {
+            "key": "field_643e7ee32d3d0",
+            "label": "CM Refresh Key",
+            "name": "cm_refresh_key",
+            "aria-label": "",
+            "type": "password",
+            "instructions": "Get the refresh key from <a href=\"https:\/\/www.challengermode.com\/developers\/applications\" target=\"_blank\"> Here<\/a>",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "options_page",
+                "operator": "==",
+                "value": "theme-general-settings"
+            }
+        ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": true,
+    "description": "",
+    "show_in_rest": 0,
+    "modified": 1681849491
+}
