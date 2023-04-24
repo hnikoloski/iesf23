@@ -104,6 +104,21 @@ body.single-tournaments {
                           @include fullSizeImg(cover);
                         }
                       }
+                      p {
+                        display: flex;
+                        align-items: center;
+                        align-content: center;
+                        flex-wrap: wrap;
+                        justify-content: flex-start;
+                        line-height: 1;
+                        .captain,
+                        .sub {
+                          margin-left: 1rem;
+                        }
+                        .captain {
+                          color: $teal;
+                        }
+                      }
                     }
                   }
                 }

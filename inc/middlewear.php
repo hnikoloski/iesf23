@@ -824,13 +824,14 @@ function iesf_tournaments_import_team_players($request)
             ),
         );
 
-        $query = new WP_Query($args);
 
+        $query = new WP_Query($args);
         if ($query->have_posts()) {
             while ($query->have_posts()) {
                 $query->the_post();
                 $playerId = get_the_ID();
                 update_field('isCaptain', $body->isCaptain, $playerId);
+                update_field('isSub', $body->role ? true : false, $playerId);
             }
         }
 

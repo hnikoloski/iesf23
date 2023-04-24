@@ -92,7 +92,20 @@ $current_page_id = get_the_ID();
                                                             ?>
                                                             <img src="<?php echo $imgUrl; ?>" alt="<?php echo get_the_title($player->ID); ?>">
                                                         </div>
-                                                        <p><?php echo get_the_title($player->ID); ?></p>
+
+                                                        <p>
+                                                            <?php echo get_the_title($player->ID); ?>
+                                                            <?php if (get_field('isCaptain', $player->ID)) : ?>
+                                                                <span class="material-symbols-outlined captain">
+                                                                    star
+                                                                </span>
+                                                            <?php endif; ?>
+                                                            <?php if (get_field('isSub', $player->ID)) : ?>
+                                                                <span class="material-symbols-outlined sub">
+                                                                    swap_horiz
+                                                                </span>
+                                                            <?php endif; ?>
+                                                        </p>
                                                     </li>
                                                 <?php endforeach; ?>
                                             </ul>
