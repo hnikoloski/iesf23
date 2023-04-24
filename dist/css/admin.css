@@ -1,3 +1,54 @@
-.tournament-admin-data form{padding:15px;position:relative}.tournament-admin-data form .form-group input,.tournament-admin-data form .form-group label{display:block}.tournament-admin-data form .form-group input:not(.btn),.tournament-admin-data form .form-group label:not(.btn){flex:0 0 100%;margin:5px;width:320px}.tournament-admin-data form.loading:before{background:hsla(0,0%,100%,.5);content:"";cursor:wait;height:100%;left:0;position:absolute;top:0;width:100%;z-index:999}.tournament-admin-data form label{display:block;font-size:1.2em;margin-bottom:.5em}.tournament-admin-data form .btn{background:#12171e;border:1px solid #12171e;border-radius:5px;color:#fff;font-size:1.2em;font-weight:500;margin:1em 0;padding:.5em 1em;width:fit-content;width:-moz-fit-content}.tournament-admin-data form .response-msg{font-size:2em;margin-top:1em}.tournament-admin-data form .response-msg.success{color:green}.tournament-admin-data form .response-msg.error{color:red}
+.tournament-admin-data form {
+  position: relative;
+  padding: 15px;
+}
+.tournament-admin-data form .form-group input,
+.tournament-admin-data form .form-group label {
+  display: block;
+}
+.tournament-admin-data form .form-group input:not(.btn),
+.tournament-admin-data form .form-group label:not(.btn) {
+  margin: 5px;
+  width: 320px;
+  flex: 0 0 100%;
+}
+.tournament-admin-data form.loading::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.5);
+  z-index: 999;
+  cursor: wait;
+}
+.tournament-admin-data form label {
+  display: block;
+  margin-bottom: 0.5em;
+  font-size: 1.2em;
+}
+.tournament-admin-data form .btn {
+  width: fit-content;
+  width: -moz-fit-content;
+  margin: 1em 0;
+  padding: 0.5em 1em;
+  font-size: 1.2em;
+  border-radius: 5px;
+  border: 1px solid #12171e;
+  background: #12171e;
+  color: #fff;
+  font-weight: 500;
+}
+.tournament-admin-data form .response-msg {
+  font-size: 2em;
+  margin-top: 1em;
+}
+.tournament-admin-data form .response-msg.success {
+  color: green;
+}
+.tournament-admin-data form .response-msg.error {
+  color: red;
+}
 
 /*# sourceMappingURL=admin.css.map*/

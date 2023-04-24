@@ -3,7 +3,9 @@
 @import "./preloader";
 @import "./hero-block";
 @import "./cta-section-block";
-@import "./_all-tournaments-block";
+@import "./all-tournaments-block";
+@import "./image-with-text-block";
+@import "./inner-hero";
 
 .iesf-blocks {
   &:not(.iesf-hero-block) {

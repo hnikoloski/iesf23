@@ -114,4 +114,43 @@ jQuery(document).ready(function ($) {
             });
 
     });
+    $('.sync-team').on('click', function (e) {
+        e.preventDefault();
+        let $theBtn = $(this);
+
+        if ($theBtn.hasClass('loading')) {
+            return;
+        }
+        $(this).addClass('loading');
+        let cm_pw = $('.tournament-admin-data #cm_pw').val();
+        let members_id_hidden = $('.tournament-admin-data #members_id_hidden').val();
+        let post_id = $('.tournament-admin-data #post_id_hidden').val();
+        let team_id_hidden = $('.tournament-admin-data #team_id_hidden').val();
+        $('.tournament-admin-data').addClass('loading');
+
+        axios.get(api_url + '/import/players', {
+            params: {
+                cm_pw: cm_pw,
+                members_ids: members_id_hidden,
+                post_id: post_id,
+                team_id: team_id_hidden
+            }
+        })
+            .then(function (response) {
+                console.log(response);
+                $theBtn.removeClass('loading');
+                if (response.data.error) {
+                    alert(response.error);
+                } else {
+                    alert(response.data.message);
+                }
+                $('.tournament-admin-data').removeClass('loading');
+            })
+            .catch(function (error) {
+                console.log(error.message);
+                $theBtn.removeClass('loading');
+
+            });
+
+    });
 }); 

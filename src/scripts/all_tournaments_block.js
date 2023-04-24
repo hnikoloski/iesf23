@@ -128,13 +128,28 @@ function tournament_card_component(bannerImgS, bannerImgM, bannerImgL, title, st
     }
 
     let imgMarkup = '';
+    let srcset = '';
+    let sizes = '';
+    if (bannerImgS) {
+        srcset += `${bannerImgS} 300w,`;
+        sizes += `(max-width: 600px) 300px,`;
+    }
+    if (bannerImgL) {
+        srcset += `${bannerImgL} 1200w,`;
+        sizes += `1200px,`;
+    }
+    if (bannerImgM) {
+        srcset += `${bannerImgM} 600w,`;
+        sizes += `(max-width: 600px) 600px,`;
+    }
+
+
+
     if (bannerImgS) {
         imgMarkup = `   <img class="single-tournament-banner"
         src="${bannerImgS}"
-         srcset="${bannerImgS} 300w,
-          ${bannerImgM} 600w,
-          ${bannerImgL} 1200w"
-            sizes="(max-width: 300px) 300px, (max-width: 600px) 600px, 1200px"
+         srcset="${srcset}"
+            sizes="${sizes}"
              alt="${title}">
         `;
     }

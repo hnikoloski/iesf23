@@ -290,7 +290,7 @@
                 "1000": "Special"
             },
             "default_value": "",
-            "return_format": "value",
+            "return_format": "array",
             "allow_null": 0,
             "other_choice": 0,
             "layout": "horizontal",
@@ -546,6 +546,43 @@
             "placeholder": "",
             "prepend": "",
             "append": ""
+        },
+        {
+            "key": "field_6446892fd7fc3",
+            "label": "Content",
+            "name": "",
+            "aria-label": "",
+            "type": "tab",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "placement": "top",
+            "endpoint": 0
+        },
+        {
+            "key": "field_64468939d7fc4",
+            "label": "description",
+            "name": "description",
+            "aria-label": "",
+            "type": "textarea",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "maxlength": "",
+            "rows": "",
+            "placeholder": "",
+            "new_lines": "wpautop"
         }
     ],
     "location": [
@@ -566,5 +603,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1682092012
+    "modified": 1682344980
 }

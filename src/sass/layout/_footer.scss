@@ -1,5 +1,6 @@
 footer.site-footer {
   padding: 0 $sidePadding;
+  margin-top: 3.5rem;
   .site-info {
     padding: 4rem 2.5rem;
     display: flex;
@@ -11,6 +12,31 @@ footer.site-footer {
     .logo-wrapper {
       width: 9.7rem;
       height: auto;
+    }
+    .socials {
+      display: flex;
+      flex-wrap: wrap;
+      align-content: center;
+      align-items: center;
+      li {
+        flex: 0 0 2.4rem;
+        width: 2.4rem;
+        height: 2.4rem;
+        &:not(:last-of-type) {
+          margin-right: 2.5rem;
+        }
+        a {
+          width: 100%;
+          height: 100%;
+          display: inline-block;
+          @include transform(scale(1));
+          transition: transform 0.3s ease;
+
+          &:hover {
+            @include transform(scale(1.15));
+          }
+        }
+      }
     }
   }
   .copy-bar {

@@ -20,4 +20,7 @@ jQuery(document).ready(function ($) {
   if ($('.iesf-hero-block').length) {
     $('.iesf-hero-block').css('margin-top', $('#masthead').outerHeight());
   }
+  if ($('.inner-hero').length) {
+    $('.inner-hero').css('margin-top', $('#masthead').outerHeight());
+  }
 });

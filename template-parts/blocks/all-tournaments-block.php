@@ -75,32 +75,33 @@ if (!empty($block['align'])) {
 
     </header>
     <div class="tournament-results">
-        <?php
-        $args = array(
-            'post_type' => 'tournaments',
-            'posts_per_page' => -1,
-            'orderby' => 'date',
-            'order' => 'ASC',
-        );
+        <!-- Fetched from api this is just a placeholder -->
+        <!-- <?php
+                $args = array(
+                    'post_type' => 'tournaments',
+                    'posts_per_page' => -1,
+                    'orderby' => 'date',
+                    'order' => 'ASC',
+                );
 
-        $tournaments = new WP_Query($args);
+                $tournaments = new WP_Query($args);
 
-        if ($tournaments->have_posts()) :
-            while ($tournaments->have_posts()) :
-                $tournaments->the_post();
-                $bannerImgS = get_field('banner_s', get_the_ID());
-                $bannerImgM = get_field('banner_m', get_the_ID());
-                $bannerImgL = get_field('banner_l', get_the_ID());
-                $title = get_the_title();
-                $theId = get_the_ID();
+                if ($tournaments->have_posts()) :
+                    while ($tournaments->have_posts()) :
+                        $tournaments->the_post();
+                        $bannerImgS = get_field('banner_s', get_the_ID());
+                        $bannerImgM = get_field('banner_m', get_the_ID());
+                        $bannerImgL = get_field('banner_l', get_the_ID());
+                        $title = get_the_title();
+                        $theId = get_the_ID();
 
-                $startTime = get_field('scheduled_start_time', $theId);
-                // Covert to just day and month
-                $startTime = date('d M', strtotime($startTime));
-                $endTime = get_field('end_time', $theId);
-                // Covert to just day and month
-                $endTime = date('d M', strtotime($endTime));
-        ?>
+                        $startTime = get_field('scheduled_start_time', $theId);
+                        // Covert to just day and month
+                        $startTime = date('d M', strtotime($startTime));
+                        $endTime = get_field('end_time', $theId);
+                        // Covert to just day and month
+                        $endTime = date('d M', strtotime($endTime));
+                ?>
 
                 <div class="single-tournament single-tournament-card">
                     <?php if ($bannerImgS) : ?>
@@ -124,7 +125,8 @@ if (!empty($block['align'])) {
                     <?php endif; ?>
                 </div>
             <?php endwhile; ?>
-        <?php endif; ?>
+        <?php endif; ?> -->
+        <!-- Fetched from api this is just a placeholder -->
 
 
     </div>
