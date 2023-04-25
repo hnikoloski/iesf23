@@ -129,6 +129,7 @@ function iesf_tournaments($request)
 
     $bearer = iesf_auth()['value'];
     $remote_url = CM_API_URL . 'tournaments/' . $tournament_id . '/graph';
+    $remote_url2 = CM_API_URL . 'tournaments/' . $tournament_id;
 
     if (!$tournament_id) {
         return new WP_Error('tournament_id_error', 'Tournament ID is required', array('status' => 500));
@@ -148,7 +149,11 @@ function iesf_tournaments($request)
 
     $body = json_decode(wp_remote_retrieve_body($response));
 
+    $secondRequest = wp_remote_get($remote_url2, array(
+        'headers' => $headers,
+    ));
 
+    $secondBody = json_decode(wp_remote_retrieve_body($secondRequest));
 
 
     if (isset($body)) {
@@ -156,12 +161,18 @@ function iesf_tournaments($request)
         // if ($body->tournament->id == null) {
         //     return new WP_Error('tournament_id_error', 'Tournament ID is incorrect', array('status' => 500));
         // }
+
+        $countriesArr = array();
+        foreach ($body->tournament->countries as $country) {
+            $countriesArr[] = $country->twoLetterISOCode;
+        }
+
         $tournamentData = array(
             'id' => $body->tournament->id,
             'name' => $body->tournament->name,
-            'gameTitle' => $body->tournament->gameTitle,
+            'gameTitle' => $secondBody->gameTitle,
             'realm' => $body->tournament->realm,
-            'countries' => $body->tournament->countries,
+            'countries' => $countriesArr,
         );
 
         // Check if logo is null 
@@ -205,8 +216,8 @@ function iesf_tournaments($request)
 
 
         foreach ($tournamentData['countries'] as $country) {
-            $countrySlug = sanitize_title($country->code);
-            $countryName = $country->code;
+            $countrySlug = sanitize_title($country);
+            $countryName = $country;
 
             // Check if country exists
             $countryTerm = term_exists($countrySlug, 'countries');
@@ -237,8 +248,8 @@ function iesf_tournaments($request)
 
             // $tournamentData['countries']
             foreach ($tournamentData['countries'] as $country) {
-                $countrySlug = sanitize_title($country->code);
-                $countryName = $country->code;
+                $countrySlug = sanitize_title($country);
+                $countryName = $country;
 
                 // Check if country exists
                 $countryTerm = term_exists($countrySlug, 'countries');
@@ -270,8 +281,8 @@ function iesf_tournaments($request)
 
             // $tournamentData['countries']
             foreach ($tournamentData['countries'] as $country) {
-                $countrySlug = sanitize_title($country->code);
-                $countryName = $country->code;
+                $countrySlug = sanitize_title($country);
+                $countryName = $country;
 
                 // Check if country exists
                 $countryTerm = term_exists($countrySlug, 'countries');
@@ -381,6 +392,7 @@ function iesf_tournaments($request)
 
         if ($body->lineups) {
             $lineUpIds = $body->lineups;
+
             $membersData = array();
             foreach ($body->members as $member) {
                 $id = $member->id;
@@ -802,7 +814,35 @@ function iesf_tournaments_import_team_players($request)
     $body = json_decode(wp_remote_retrieve_body($response));
 
     $checkIds = $body->memberIds;
+    if ($body->teamId) {
+        $secondResponse = wp_remote_get(CM_API_URL . 'teams/' . $body->teamId, array(
+            'headers' => $headers,
+        ));
 
+        $secondBody = json_decode(wp_remote_retrieve_body($secondResponse));
+
+        if ($secondBody->logoImage->small->url) {
+            update_field('logo_s', $secondBody->logoImage->small->url, $post_id);
+        }
+        if ($secondBody->logoImage->medium->url) {
+            update_field('logo_m', $secondBody->logoImage->medium->url, $post_id);
+        }
+        if ($secondBody->logoImage->large->url) {
+            update_field('logo_l', $secondBody->logoImage->large->url, $post_id);
+        }
+        if ($secondBody->logoImage->xlarge->url) {
+            update_field('logo_xl', $secondBody->logoImage->xlarge->url, $post_id);
+        }
+        if ($secondBody->description) {
+            update_field('description', $secondBody->description, $post_id);
+        }
+        if ($secondBody->website) {
+            update_field('website', $secondBody->name, $post_id);
+        }
+        if ($secondBody->country) {
+            update_field('country', $secondBody->name, $post_id);
+        }
+    }
     // /v1/tournaments/lineup_members/{id}
     foreach ($checkIds as $checkId) {
         $response = wp_remote_get(CM_API_URL . 'tournaments/lineup_members/' . $checkId, array(
@@ -810,6 +850,7 @@ function iesf_tournaments_import_team_players($request)
         ));
 
         $body = json_decode(wp_remote_retrieve_body($response));
+
 
         // find a player with the the acf field player_id  same as $body->userId and update the isCaptain to $body->isCaptain
         $args = array(

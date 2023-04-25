@@ -66,6 +66,21 @@ body.single-tournaments {
                   flex-wrap: wrap;
                   border-bottom: 1px solid $dblue;
                   padding: 1.5rem;
+                  .wrap {
+                    display: flex;
+                    align-items: center;
+                    align-content: center;
+                    justify-content: flex-start;
+                    flex-wrap: wrap;
+                    .img-wrapper {
+                      flex: 0 0 6.4rem;
+                      width: 6.4rem;
+                      height: 6.4rem;
+                      margin-right: 1.5rem;
+                      @include borderRadius(50%);
+                      overflow: hidden;
+                    }
+                  }
                   &:first-of-type {
                     border-top: 1px solid $dblue;
                   }
@@ -100,9 +115,6 @@ body.single-tournaments {
                         margin-right: 1.5rem;
                         @include borderRadius(50%);
                         overflow: hidden;
-                        img {
-                          @include fullSizeImg(cover);
-                        }
                       }
                       p {
                         display: flex;

@@ -63,7 +63,17 @@ $current_page_id = get_the_ID();
                         <ul class="lineup-wrapper">
                             <?php while ($query->have_posts()) : $query->the_post(); ?>
                                 <li>
-                                    <?php the_title(); ?><a href="#!" class="accordion-expand"><span class="material-symbols-outlined">
+                                    <?php
+                                    $imgUrl = get_field('logo_m') ? get_field('logo_m') : get_template_directory_uri() . '/assets/images/placeholder_team.png';
+
+                                    ?>
+                                    <div class="wrap">
+                                        <div class="img-wrapper">
+                                            <img src="<?php echo $imgUrl; ?>" alt="<?php the_title(); ?>" class="full-size-img full-size-img-cover">
+                                        </div>
+                                        <?php the_title(); ?>
+                                    </div>
+                                    <a href="#!" class="accordion-expand"><span class="material-symbols-outlined">
                                             expand_more
                                         </span></a>
                                     <div class="lineup-members">
@@ -90,7 +100,7 @@ $current_page_id = get_the_ID();
                                                             <?php
                                                             $imgUrl = get_field('picture', $player->ID) ? get_field('picture', $player->ID) : get_template_directory_uri() . '/assets/images/placeholder_person.png';
                                                             ?>
-                                                            <img src="<?php echo $imgUrl; ?>" alt="<?php echo get_the_title($player->ID); ?>">
+                                                            <img src="<?php echo $imgUrl; ?>" alt="<?php echo get_the_title($player->ID); ?>" class="full-size-img full-size-img-cover">
                                                         </div>
 
                                                         <p>
