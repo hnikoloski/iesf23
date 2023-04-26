@@ -1,0 +1,97 @@
+.page-template-contact-page {
+  .main {
+    > .wrapper {
+      padding: 7.5rem $sidePadding;
+      .contact-form {
+        width: 45rem;
+        margin-left: auto;
+        margin-right: auto;
+        form {
+          &.loading {
+            .loading-icon {
+              content: "";
+              background: url("../../assets/images/spinner-solid.svg");
+              @include bg-props(contain, center, no-repeat);
+              width: 10.5rem;
+              height: 10.5rem;
+              -webkit-animation: rotate-scale-down 1.5s linear infinite both;
+              animation: rotate-scale-down 1.5s linear infinite both;
+              margin: 0 auto;
+            }
+          }
+          .form-control {
+            position: relative;
+            .error-message {
+              position: absolute;
+              bottom: -2rem;
+              left: 0;
+              font-size: 1.4rem;
+              color: #ff0000;
+              font-weight: 300;
+            }
+
+            label {
+              font-size: 1.8rem;
+              font-weight: 700;
+              color: #fff;
+              margin-bottom: 0.5rem;
+              display: block;
+              span {
+                color: #ff0000;
+              }
+            }
+            &:not(:last-of-type) {
+              margin-bottom: 2.5rem;
+            }
+            input,
+            textarea {
+              width: 100%;
+              background: $dblue;
+              border: 1px solid $dblue;
+              padding: 1.5rem 2rem;
+              font-size: 1.8rem;
+              font-weight: 300;
+              color: #fff;
+              @include borderRadius(0.8rem);
+              transition: all 0.3s ease;
+              resize: none;
+              font-family: $roboto;
+              &:focus {
+                outline: none;
+                border-color: $teal;
+                box-shadow: 0 3px 6px rgba(0, 0, 0, 0.36);
+              }
+              &.error {
+                border-color: #ff0000;
+              }
+            }
+            input[type="submit"] {
+              cursor: pointer;
+              &:hover {
+                border-color: $teal;
+              }
+            }
+          }
+          .response-wrapper {
+            padding: 1.5rem 2rem;
+            border: 1px solid $dblue;
+            @include borderRadius(0.8rem);
+            display: none;
+            text-align: center;
+            p {
+              font-size: 1.8rem;
+              font-weight: 300;
+              color: #fff;
+            }
+            &.success {
+              border-color: $teal;
+            }
+            &.error {
+              border-color: #ff0000;
+            }
+          }
+        }
+      }
+    }
+  }
+}

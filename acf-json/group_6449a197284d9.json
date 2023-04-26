@@ -1,10 +1,10 @@
 {
-    "key": "group_643e7ee354efe",
-    "title": "Theme Settings",
+    "key": "group_6449a197284d9",
+    "title": "Contact Page",
     "fields": [
         {
-            "key": "field_6449a03d45d31",
-            "label": "Contact",
+            "key": "field_6449a19768ff4",
+            "label": "Hero",
             "name": "",
             "aria-label": "",
             "type": "tab",
@@ -20,66 +20,77 @@
             "endpoint": 0
         },
         {
-            "key": "field_6449a04f45d33",
-            "label": "Contact Email",
-            "name": "contact_email",
+            "key": "field_6449a1aa68ff5",
+            "label": "Title",
+            "name": "title",
             "aria-label": "",
-            "type": "email",
-            "instructions": "Get the refresh key from <a href=\"https:\/\/www.challengermode.com\/developers\/applications\" target=\"_blank\"> Here<\/a>",
+            "type": "text",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
-                "width": "",
+                "width": "40",
                 "class": "",
                 "id": ""
             },
             "default_value": "",
+            "maxlength": "",
             "placeholder": "",
             "prepend": "",
             "append": ""
         },
         {
-            "key": "field_6449a04b45d32",
-            "label": "CM",
-            "name": "",
+            "key": "field_6449a1fd68ff6",
+            "label": "Description",
+            "name": "subtitle",
             "aria-label": "",
-            "type": "tab",
+            "type": "textarea",
             "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
-                "width": "",
+                "width": "40",
                 "class": "",
                 "id": ""
             },
-            "placement": "top",
-            "endpoint": 0
+            "default_value": "",
+            "maxlength": "",
+            "rows": "",
+            "placeholder": "",
+            "new_lines": "wpautop"
         },
         {
-            "key": "field_643e7ee32d3d0",
-            "label": "CM Refresh Key",
-            "name": "cm_refresh_key",
+            "key": "field_6449a21668ff7",
+            "label": "Hero background",
+            "name": "banner_s",
             "aria-label": "",
-            "type": "password",
-            "instructions": "Get the refresh key from <a href=\"https:\/\/www.challengermode.com\/developers\/applications\" target=\"_blank\"> Here<\/a>",
+            "type": "image",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
-                "width": "",
+                "width": "20",
                 "class": "",
                 "id": ""
             },
-            "placeholder": "",
-            "prepend": "",
-            "append": ""
+            "return_format": "url",
+            "library": "all",
+            "min_width": "",
+            "min_height": "",
+            "min_size": "",
+            "max_width": "",
+            "max_height": "",
+            "max_size": "",
+            "mime_types": "",
+            "preview_size": "thumbnail"
         }
     ],
     "location": [
         [
             {
-                "param": "options_page",
+                "param": "page_template",
                 "operator": "==",
-                "value": "theme-general-settings"
+                "value": "contact-page.php"
             }
         ]
     ],
@@ -92,5 +103,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1682546798
+    "modified": 1682547272
 }

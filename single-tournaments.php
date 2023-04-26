@@ -29,19 +29,30 @@ $current_page_id = get_the_ID();
     <div class="content">
         <div class="tabs">
             <div class="tabs-tab-header">
-                <div class="tabs-tab-header-item active">
-                    <p>Description</p>
+
+                <div class="tabs-tab-header-item ">
+                    <p>Group Stage</p>
                 </div>
+                <?php if (get_field('description')) : ?>
+                    <div class="tabs-tab-header-item ">
+                        <p>Description</p>
+                    </div>
+                <?php endif; ?>
                 <div class="tabs-tab-header-item">
                     <p>Lineup</p>
                 </div>
             </div>
             <div class="tabs-tab-content">
-                <div class="tabs-tab-content-item active">
-                    <?php
-                    echo get_field('description');
-                    ?>
+                <div class="tabs-tab-content-item ">
+                    GRUP STEJDZ
                 </div>
+                <?php if (get_field('description')) : ?>
+                    <div class="tabs-tab-content-item">
+                        <?php
+                        echo get_field('description');
+                        ?>
+                    </div>
+                <?php endif; ?>
                 <div class="tabs-tab-content-item">
                     <?php
                     // post_type=teams
@@ -140,7 +151,6 @@ $current_page_id = get_the_ID();
         </div>
     </div>
     <div class=" sidebar">
-
         <div class="tournament-info-card" style="--logo-img:url(<?php echo $logo_m; ?>);">
             <ul>
                 <?php if ($scheduled_start_time) : ?>
@@ -181,14 +191,7 @@ $current_page_id = get_the_ID();
                     <li>
                         <p class="label">Game:</p>
                         <?php foreach ($game_terms as $term) : ?>
-                            <?php
-                            // image acf
-                            $game_logo = get_field('game_logo', $term);
-                            if ($game_logo) : ?>
-                                <div class="logo-wrap">
-                                    <img src="<?php echo $game_logo['url']; ?>" alt="<?php echo $game_logo['alt']; ?>" class="full-size-img full-size-img-contain">
-                                </div>
-                            <?php endif; ?>
+
                             <p class="info d-flex align-items-center">
                                 <?php echo $term->name; ?>
                             </p>

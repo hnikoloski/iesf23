@@ -275,19 +275,19 @@
             },
             "choices": {
                 "0": "Unknown",
-                "100": "SingleElimination",
-                "101": "RoundRobinSingleElimination",
-                "102": "RoundRobinX2SingleElimination",
-                "200": "DoubleElimination",
-                "201": "RoundRobinDoubleElimination",
-                "202": "RoundRobinX2DoubleElimination",
+                "100": "Single Elimination",
+                "101": "Round Robin + Single Elimination",
+                "102": "Round Robin X2 + Single Slimination",
+                "200": "Double Elimination",
+                "201": "Round Robin + Double Elimination",
+                "202": "Round Robin X2 + Double Elimination",
                 "300": "Swiss",
-                "301": "RoundRobinSwiss",
-                "302": "RoundRobinX2Swiss",
-                "303": "SwissDoubleElimination",
-                "304": "SwissSingleElimination",
-                "400": "RoundRobin",
-                "1000": "Special"
+                "301": "Round Robin + Swiss",
+                "302": "Round Robin X2 + Swiss",
+                "303": "Swiss + Double Elimination",
+                "304": "Swiss + Single Elimination",
+                "400": "Round Robin",
+                "1000": "Specia"
             },
             "default_value": "",
             "return_format": "array",
@@ -548,6 +548,63 @@
             "append": ""
         },
         {
+            "key": "field_64498ee87ef9b",
+            "label": "Groups & Brackets",
+            "name": "",
+            "aria-label": "",
+            "type": "tab",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "placement": "top",
+            "endpoint": 0
+        },
+        {
+            "key": "field_64498ef07ef9c",
+            "label": "Groups",
+            "name": "groups",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "maxlength": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_64499082d219b",
+            "label": "Brackets",
+            "name": "brackets",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "maxlength": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
             "key": "field_6446892fd7fc3",
             "label": "Content",
             "name": "",
@@ -603,5 +660,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1682344980
+    "modified": 1682542729
 }

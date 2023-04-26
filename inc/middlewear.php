@@ -54,6 +54,19 @@ add_action('rest_api_init', function () {
         'callback' => 'iesf_tournaments_import_team_players',
         'permission_callback' => '__return_true',
     ));
+    // import groups and brackets
+    register_rest_route(API_NAMESPACE, '/tournaments/import/groups', array(
+        'methods' => 'GET',
+        'callback' => 'iesf_tournaments_import_groups',
+        'permission_callback' => '__return_true',
+    ));
+
+    // contact form submission
+    register_rest_route(API_NAMESPACE, '/contact', array(
+        'methods' => 'POST',
+        'callback' => 'iesf_contact_form',
+        'permission_callback' => '__return_true',
+    ));
 });
 
 function iesf_auth()
@@ -157,6 +170,8 @@ function iesf_tournaments($request)
 
 
     if (isset($body)) {
+        // var_dump($body);
+        // die();
         // Get the gameTitle from the body
         if ($body->tournament->id == null) {
             return new WP_Error('tournament_id_error', 'Tournament ID is incorrect', array('status' => 500));
@@ -382,12 +397,23 @@ function iesf_tournaments($request)
             $tournamentData['format'] = $body->tournament->format;
             update_field('format', $tournamentData['format'], $tournamentPost);
         }
+        if ($body->description) {
+            if ($body->description->text) {
+                $tournamentData['description'] = $body->description->text;
+                $tournamentDescription = $tournamentData['description'];
 
-        if ($body->description->text) {
-            $tournamentData['description'] = $body->description->text;
-            $tournamentDescription = $tournamentData['description'];
+                update_field('description', $tournamentDescription, $tournamentPost);
+            }
+        }
 
-            update_field('description', $tournamentDescription, $tournamentPost);
+        if ($body->groups) {
+            update_field('groups', $body->groups, $tournamentPost);
+            $tournamentData['groups'] = $body->groups;
+        }
+
+        if ($body->brackets) {
+            update_field('brackets', $body->brackets, $tournamentPost);
+            $tournamentData['brackets'] = $body->brackets;
         }
 
         if ($body->lineups) {
@@ -897,6 +923,148 @@ function iesf_tournaments_import_team_players($request)
 
     return [
         'message' => 'Players imported successfully',
+        'error' => false,
+        'status' => 200,
+    ];
+}
+
+// Import groups and brackets
+function iesf_tournaments_import_groups($request)
+{
+    $cm_pw = $request['cm_pw'];
+    $tournament_id = $request['tournament_id'];
+    $post_id = $request['post_id'];
+    $bearer = iesf_auth()['value'];
+
+    if (!$cm_pw || !$tournament_id || !$post_id) {
+        return [
+            'message' => 'Missing parameters',
+            'error' => true,
+            'status' => 400,
+        ];
+    }
+
+    if ($tournament_id != get_field('tournament_cm_id', $post_id)) {
+        return [
+            'message' => 'This is not the correct tournament',
+            'error' => true,
+            'status' => 400,
+        ];
+    }
+
+    if (get_option('cm_options')['cm_api_password'] != $cm_pw) {
+        return new WP_Error('cm_pw_error', 'Challenger Mode API password is incorrect', array('status' => 500));
+    }
+    $groupsData = get_field('groups', $post_id);
+    $bracketsData = get_field('brackets', $post_id);
+
+    print_r(json_encode($groupsData));
+    die();
+}
+
+
+// contact form submission
+function iesf_contact_form($request)
+{
+    $name = $request['name'];
+    $email = $request['email'];
+    $usrMsg = $request['message'];
+    // sanitize all request data
+    $name = sanitize_text_field($name);
+    $email = sanitize_email($email);
+    $usrMsg = sanitize_textarea_field($usrMsg);
+    $userMsg = strip_tags($usrMsg);
+
+
+    $error = array(
+        'message' => 'One or more fields have an error. Please check and try again.',
+        'error' => true,
+        'status' => 500,
+        'err_fields' => '',
+    );
+
+    // name validation  // name must be at least 2 characters
+    if (!$name || strlen($name) < 2) {
+        $error['err_fields'] .= 'name, ';
+    }
+
+
+    // email validation
+    if (!$email) {
+        $error['err_fields'] .= 'email, ';
+    } else {
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $error['err_fields'] .= 'email, ';
+        }
+    }
+
+    // message validation message must be at least 10 characters
+    if (!$usrMsg || strlen($usrMsg) < 10) {
+        $error['err_fields'] .= 'message, ';
+    }
+
+
+    if ($error['err_fields']) {
+        $error['err_fields'] = rtrim($error['err_fields'], ', ');
+        return $error;
+    }
+    // Send auto reply email
+    $to = get_field('contact_email', 'option') ? get_field('contact_email', 'option') : get_option('admin_email');
+    $custom_logo_id = get_theme_mod('custom_logo');
+    $logoUrl = wp_get_attachment_image_src($custom_logo_id, 'full');
+    $logoUrl = $logoUrl[0];
+    $to = $email;
+    $contactEmail = get_field('contact_email', 'option') ? get_field('contact_email', 'option') : get_option('admin_email');
+
+    $headers = array('Content-Type: text/html; charset=UTF-8');
+    $headers[] = 'From: IESF <' . $contactEmail . '>';
+
+    $message = '<table style="width: 100%; max-width: 600px; margin: 0 auto; border: 1px solid #ccc; border-collapse: collapse; font-family: Arial, Helvetica, sans-serif; font-size: 14px; line-height: 1.5; color: #333;">';
+    $message .= '<tr>';
+    $message .= '<td style="padding: 20px 30px; border: 1px solid #ccc; border-collapse: collapse; margin:0 auto; text-align:center;">';
+    $message .= '<img src="' . $logoUrl . '" alt="IESF" style="width: 100px; height: auto;">';
+    $message .= '</td>';
+    $message .= '</tr>';
+    $message .= '<tr>';
+    $message .= '<td style="padding: 20px 30px; border: 1px solid #ccc; border-collapse: collapse;">';
+    $message .= '<h2 style="margin: 0 0 20px; font-size: 18px; text-align:center;">Thank you for contacting us</h2>';
+    $message .= '<p style="margin: 0 0 20px; text-align:center;">We have received your message and will get back to you as soon as possible.</p>';
+    $message .= '</td>';
+    $message .= '</tr>';
+    $message .= '</table>';
+
+    $subject = 'Thank you for contacting IESF';
+
+    wp_mail($email, $subject, $message, $headers);
+
+    // Send email to admin
+    $toAdmin = get_field('contact_email', 'option') ? get_field('contact_email', 'option') : get_option('admin_email');
+
+    $headersAdmin = array('Content-Type: text/html; charset=UTF-8');
+    $headersAdmin[] = 'From: IESF Contact Form <' . $email . '>';
+
+    $messageToAdmin = '<table style="width: 100%; max-width: 600px; margin: 0 auto; border: 1px solid #ccc; border-collapse: collapse; font-family: Arial, Helvetica, sans-serif; font-size: 14px; line-height: 1.5; color: #333;">';
+    $messageToAdmin .= '<tr>';
+    $messageToAdmin .= '<td style="padding: 20px 30px; border: 1px solid #ccc; border-collapse: collapse; margin:0 auto; text-align:center;">';
+    $messageToAdmin .= '<img src="' . $logoUrl . '" alt="IESF" style="width: 100px; height: auto;">';
+    $messageToAdmin .= '</td>';
+    $messageToAdmin .= '</tr>';
+    $messageToAdmin .= '<tr>';
+    $messageToAdmin .= '<td style="padding: 20px 30px; border: 1px solid #ccc; border-collapse: collapse;">';
+    $messageToAdmin .= '<h2 style="margin: 0 0 20px; font-size: 18px; text-align:center;">New message from IESF contact form</h2>';
+    $messageToAdmin .= '<p style="margin: 0 0 20px; ">Name: ' . $name . '</p>';
+    $messageToAdmin .= '<p style="margin: 0 0 20px; ">Email: ' . $email . '</p>';
+    $messageToAdmin .= '<p style="margin: 0 0 20px; ">Message: ' . $usrMsg . '</p>';
+    $messageToAdmin .= '</td>';
+    $messageToAdmin .= '</tr>';
+    $messageToAdmin .= '</table>';
+
+    $subjectAdmin = 'New message from IESF contact form';
+
+    wp_mail($toAdmin, $subjectAdmin, $messageToAdmin, $headersAdmin);
+
+    return [
+        'message' => 'Message sent successfully',
         'error' => false,
         'status' => 200,
     ];

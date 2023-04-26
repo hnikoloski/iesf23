@@ -15,12 +15,11 @@
     &::after {
       content: "";
       position: absolute;
-      top: 2.5rem;
-      @include hor-center();
+      @include abs-center();
       background: url("../../assets/images/spinner-solid.svg");
       @include bg-props(contain, center, no-repeat);
-      width: 10.5rem;
-      height: 10.5rem;
+      width: 12.5rem;
+      height: 12.5rem;
       -webkit-animation: rotate-scale-down 1s linear infinite both;
       animation: rotate-scale-down 1s linear infinite both;
       z-index: 99;
@@ -248,33 +247,4 @@
 }
 .select2-container--default .select2-results > .select2-results__options {
   font-size: 2rem;
-}
-
-@-webkit-keyframes rotate-scale-down {
-  0% {
-    -webkit-transform: scale(1) rotateZ(0);
-    transform: scale(1) rotateZ(0);
-  }
-  50% {
-    -webkit-transform: scale(0.5) rotateZ(180deg);
-    transform: scale(0.5) rotateZ(180deg);
-  }
-  100% {
-    -webkit-transform: scale(1) rotateZ(360deg);
-    transform: scale(1) rotateZ(360deg);
-  }
-}
-@keyframes rotate-scale-down {
-  0% {
-    -webkit-transform: scale(1) rotateZ(0);
-    transform: scale(1) rotateZ(0);
-  }
-  50% {
-    -webkit-transform: scale(0.5) rotateZ(180deg);
-    transform: scale(0.5) rotateZ(180deg);
-  }
-  100% {
-    -webkit-transform: scale(1) rotateZ(360deg);
-    transform: scale(1) rotateZ(360deg);
-  }
 }

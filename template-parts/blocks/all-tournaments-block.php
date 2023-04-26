@@ -64,6 +64,7 @@ if (!empty($block['align'])) {
         // taxonomy=countries
         $countries = get_terms(array(
             'taxonomy' => 'countries',
+            // And child terms
             'hide_empty' => false,
         ));
         ?>
@@ -71,6 +72,7 @@ if (!empty($block['align'])) {
             <option value="*">All Countries</option>
             <?php foreach ($countries as $country) : ?>
                 <option value="<?php echo $country->slug; ?>"><?php echo $country->name; ?></option>
+                <!-- If children show them indent -->
             <?php endforeach; ?>
         </select>
 

@@ -8,7 +8,8 @@ jQuery(document).ready(function ($) {
     $('.single-tournaments .grid .content .tabs-tab-content-item').each(function (index) {
         $(this).attr('data-tab', index);
     });
-
+    $('.single-tournaments .grid .content .tabs-tab-header-item').first().addClass('active');
+    $('.single-tournaments .grid .content .tabs-tab-content-item').first().addClass('active');
 
     $('.single-tournaments .tabs-tab-header-item').on('click', function () {
         let targetEl = $(this).attr('data-tab');
@@ -18,10 +19,14 @@ jQuery(document).ready(function ($) {
         $('.single-tournaments .tabs-tab-content-item').removeClass('active');
         $('.single-tournaments .tabs-tab-content-item[data-tab="' + targetEl + '"]').addClass('active');
     });
-    $('.single-tournaments .accordion-expand').on('click', function (e) {
+    $('.single-tournaments .lineup-wrapper > li').on('click', function (e) {
         e.preventDefault();
+        // :not(.lineup-members-list)
+        if (e.target !== this) {
+            return;
+        }
+        $(this).find('.accordion-expand').toggleClass('active');
         $(this).toggleClass('active');
-        $(this).parent().toggleClass('active');
-        $(this).siblings('.lineup-members').slideToggle();
+        $(this).find('.lineup-members').slideToggle();
     });
 });

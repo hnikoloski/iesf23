@@ -66,6 +66,7 @@ body.single-tournaments {
                   flex-wrap: wrap;
                   border-bottom: 1px solid $dblue;
                   padding: 1.5rem;
+                  cursor: pointer;
                   .wrap {
                     display: flex;
                     align-items: center;
@@ -109,6 +110,10 @@ body.single-tournaments {
                     li {
                       justify-content: flex-start;
                       border: none !important;
+                      &:hover {
+                        background-color: #12171e;
+                        cursor: default;
+                      }
                       .img-wrapper {
                         width: 4rem;
                         height: 4rem;
