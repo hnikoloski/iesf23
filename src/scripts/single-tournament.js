@@ -2,6 +2,14 @@ jQuery(document).ready(function ($) {
     let stickyElement = $(".tournament-info-card");
     stickyElement.css('top', ($("#masthead").outerHeight() / 10) + 4 + 'rem');
 
+    $('.single-tournaments .grid .content .tabs-tab-header-item').each(function (index) {
+        $(this).attr('data-tab', index);
+    });
+    $('.single-tournaments .grid .content .tabs-tab-content-item').each(function (index) {
+        $(this).attr('data-tab', index);
+    });
+
+
     $('.single-tournaments .tabs-tab-header-item').on('click', function () {
         let targetEl = $(this).attr('data-tab');
         $('.single-tournaments .tabs-tab-header-item').removeClass('active');

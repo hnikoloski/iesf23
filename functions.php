@@ -153,6 +153,9 @@ function starter_scripts()
 
     wp_register_style('style', get_template_directory_uri() . '/dist/css/app.css', [], 1, 'all');
     wp_enqueue_style('style');
+    //    https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js
+    wp_register_script('select2', 'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js', ['jquery'], 1, true);
+    wp_enqueue_script('select2');
 
     wp_register_script('app', get_template_directory_uri() . '/dist/js/app.js', ['jquery'], 1, true);
     wp_enqueue_script('app');

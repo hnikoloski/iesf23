@@ -11,7 +11,7 @@ jQuery(document).ready(function ($) {
             let $this = $(this);
             $this.siblings('.filter-vals').find('input[name="' + $this.attr('name') + '"]').val($this.val());
             // submit form
-            $this.siblings('.filter-vals').submit();
+            $this.siblings('.filter-vals').trigger('submit');
         });
 
         // select2
@@ -52,17 +52,19 @@ jQuery(document).ready(function ($) {
         $('.iesf-all-tournaments-block .filter-vals').on('submit', function (e) {
             e.preventDefault();
             let $this = $(this);
-
+            $this.addClass('loading');
             let $game = $this.find('input[name="filter_games"]').val();
             let $region = $this.find('input[name="filter_region"]').val();
             let $country = $this.find('input[name="filter_country"]').val();
             let showPastTournaments = $this.find('input[name="show_past_tournaments"]').val();
+            let $filter_page = $this.find('input[name="filter_page"]').val();
 
             let $data = {
                 region: $region,
                 game: $game,
                 country: $country,
-                show_past_tournaments: showPastTournaments
+                show_past_tournaments: showPastTournaments,
+                page: $filter_page
             };
 
             axios.get(api_url, {
@@ -76,7 +78,18 @@ jQuery(document).ready(function ($) {
 
                 let tournaments = response.data;
                 let tournamentsMarkup = '';
-                tournaments.forEach(function (tournament) {
+                let paginationTotal = tournaments.total
+                // Check if we need pagination we need to have 9 posts per page
+                if (paginationTotal > 9) {
+                    let pagination = '';
+                    let paginationTotalPages = Math.ceil(paginationTotal / 9);
+                    for (let i = 1; i <= paginationTotalPages; i++) {
+
+                        pagination += '<li class="page-item"><a class="page-link" href="' + i + '">' + i + '</a></li>';
+                    }
+                    $('.iesf-all-tournaments-block').append('<ul class="pagination">' + pagination + '</ul>');
+                }
+                tournaments.tournaments.forEach(function (tournament) {
                     let startTime = moment(tournament.start_time).format('YYYY-MM-DD HH:mm:ss');
                     let endTime = moment(tournament.end_time).format('YYYY-MM-DD HH:mm:ss');
                     tournamentsMarkup += tournament_card_component(tournament.banner_s, tournament.banner_m, tournament.banner_l, tournament.title, startTime, endTime, tournament.link);
@@ -106,6 +119,18 @@ jQuery(document).ready(function ($) {
                 });
             }
             )
+                .then(() => {
+                    $('.iesf-all-tournaments-block .pagination .page-item a').on('click', function (e) {
+                        e.preventDefault();
+                        let $this = $(this);
+                        $('.iesf-all-tournaments-block .pagination .page-item a').removeClass('active');
+                        $this.addClass('active');
+
+                    })
+                })
+                .then(() => {
+                    $this.removeClass('loading');
+                })
                 .catch(function (error) {
                     console.log(error);
                 });
@@ -113,7 +138,7 @@ jQuery(document).ready(function ($) {
         });
 
         // submit form on page load
-        $('.iesf-all-tournaments-block .filter-vals').submit();
+        $('.iesf-all-tournaments-block .filter-vals').trigger('submit');
     }
 });
 

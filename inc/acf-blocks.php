@@ -43,10 +43,7 @@ function iesf_acf_init_block_types()
             'supports'          => array(
                 'mode' => true,
             ),
-            // Enqueue blocks assets just once for all blocks
-            'enqueue_assets' => function () {
-                wp_enqueue_script('select2', 'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js', ['jquery'], 1, true);
-            },
+
         ));
 
         // Cta Block

@@ -1,8 +1,5 @@
-<?php
-
-/**
- * All tournaments Block Template.
- */
+<?php get_header();
+get_template_part('template-parts/inner-hero');
 
 $anchor = '';
 if (!empty($block['anchor'])) {
@@ -17,18 +14,14 @@ if (!empty($block['className'])) {
 if (!empty($block['align'])) {
     $class_name .= ' align' . $block['align'];
 }
-
-
 ?>
-
 <div <?= $anchor; ?> class="<?= esc_attr($class_name); ?>">
     <header class="tournament-filter">
         <form class="filter-vals d-none">
             <input type="hidden" name="filter_games" value="*">
             <input type="hidden" name="filter_region" value="*">
             <input type="hidden" name="filter_country" value="*">
-            <input type="hidden" name="show_past_tournaments" value="<?php echo get_field('show_past_tournaments') ? 'true' : 'false'; ?>">
-            <input type="hidden" name="filter_page" value="1">
+            <input type="hidden" name="show_past_tournaments" value="<?php echo get_field('show_past_tournaments') ? 'false' : 'true'; ?>">
         </form>
         <?php
         // taxonomy=region&post_type=tournaments
@@ -133,3 +126,5 @@ if (!empty($block['align'])) {
     </div>
 
 </div>
+<?php
+get_footer();

@@ -29,20 +29,20 @@ $current_page_id = get_the_ID();
     <div class="content">
         <div class="tabs">
             <div class="tabs-tab-header">
-                <div class="tabs-tab-header-item active" data-tab="1">
+                <div class="tabs-tab-header-item active">
                     <p>Description</p>
                 </div>
-                <div class="tabs-tab-header-item" data-tab="2">
+                <div class="tabs-tab-header-item">
                     <p>Lineup</p>
                 </div>
             </div>
             <div class="tabs-tab-content">
-                <div class="tabs-tab-content-item active" data-tab="1">
+                <div class="tabs-tab-content-item active">
                     <?php
                     echo get_field('description');
                     ?>
                 </div>
-                <div class="tabs-tab-content-item" data-tab="2">
+                <div class="tabs-tab-content-item">
                     <?php
                     // post_type=teams
                     $args = array(
@@ -165,7 +165,7 @@ $current_page_id = get_the_ID();
                 <?php if ($total_slot_count) : ?>
                     <li>
                         <p class="label">Slots:</p>
-                        <p class="info"><?php echo $total_slot_count; ?> / <?php echo $filled_slot_count ? $filled_slot_count : 0; ?></p>
+                        <p class="info"><?php echo $filled_slot_count ? $filled_slot_count : 0; ?> / <?php echo $total_slot_count; ?></p>
                     </li>
                 <?php endif; ?>
                 <?php if ($format) : ?>
@@ -174,6 +174,28 @@ $current_page_id = get_the_ID();
                         <p class="info"><?php echo $format['label']; ?></p>
                     </li>
                 <?php endif; ?>
+                <?php
+                // get game taxonomies
+                $game_terms = get_the_terms(get_the_ID(), 'games');
+                if ($game_terms) : ?>
+                    <li>
+                        <p class="label">Game:</p>
+                        <?php foreach ($game_terms as $term) : ?>
+                            <?php
+                            // image acf
+                            $game_logo = get_field('game_logo', $term);
+                            if ($game_logo) : ?>
+                                <div class="logo-wrap">
+                                    <img src="<?php echo $game_logo['url']; ?>" alt="<?php echo $game_logo['alt']; ?>" class="full-size-img full-size-img-contain">
+                                </div>
+                            <?php endif; ?>
+                            <p class="info d-flex align-items-center">
+                                <?php echo $term->name; ?>
+                            </p>
+                        <?php endforeach; ?>
+                    </li>
+                <?php endif; ?>
+
             </ul>
 
         </div>

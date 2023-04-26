@@ -620,13 +620,24 @@ function iesf_tournaments_posts($request)
     $game = $request['game'];
     $country = $request['country'];
     $showPastTournaments = $request['show_past_tournaments'];
+    $page = $request['page'];
+    // Sort by get_field('scheduled_start_time'). Earlier dates first. and if it is in the past, show it last.
     $args = array(
         'post_type' => 'tournaments',
         'posts_per_page' => 6,
-        'orderby' => 'menu_order',
         'post_status' => 'publish',
-        'offset' => 0,
+        'orderby' => 'meta_value',
+        'meta_key' => 'scheduled_start_time',
+        'order' => 'DESC',
+        'tax_query' => array(
+            'relation' => 'AND',
+        ),
+
     );
+
+    if ($page) {
+        $args['offset'] = $page * 6;
+    }
 
     if ($region && $region != '*') {
         $args['tax_query'][] = array(
@@ -654,9 +665,14 @@ function iesf_tournaments_posts($request)
 
     $tournaments = new WP_Query($args);
 
-    $results = array();
-
+    $total = 0;
+    $results = array(
+        'total' => $total,
+        'tournaments' => array(),
+    );
     if ($tournaments->have_posts()) {
+        $total = $tournaments->found_posts;
+        $results['total'] = $total;
         while ($tournaments->have_posts()) {
             $tournaments->the_post();
             $regions = wp_get_post_terms(get_the_ID(), 'region');
@@ -700,7 +716,7 @@ function iesf_tournaments_posts($request)
                 'link' => get_the_permalink(),
 
             );
-            array_push($results, $tournament);
+            array_push($results['tournaments'], $tournament);
         }
     } else {
         $results['message'] = 'No tournaments found';

@@ -30,4 +30,11 @@ if (function_exists('acf_add_options_page')) {
         'menu_title'    => 'Api Debug',
         'parent_slug'   => 'theme-general-settings',
     ));
+
+    // Options for the Tournaments Archive Page
+    acf_add_options_sub_page(array(
+        'page_title'    => 'Tournaments Archive',
+        'menu_title'    => 'Tournaments Archive',
+        'parent_slug'   => 'edit.php?post_type=tournaments',
+    ));
 }
