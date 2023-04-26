@@ -22,6 +22,7 @@ if (!empty($block['align'])) {
             <input type="hidden" name="filter_region" value="*">
             <input type="hidden" name="filter_country" value="*">
             <input type="hidden" name="show_past_tournaments" value="<?php echo get_field('show_past_tournaments') ? 'false' : 'true'; ?>">
+            <input type="hidden" name="filter_page" value="1">
         </form>
         <?php
         // taxonomy=region&post_type=tournaments

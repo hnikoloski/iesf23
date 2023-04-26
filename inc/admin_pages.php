@@ -283,23 +283,6 @@ function my_teams_sync_meta_box_callback($post)
             opacity: 0.8;
             z-index: 999;
         }
-
-        .tournament-admin-data.loading {
-            position: relative;
-        }
-
-        .tournament-admin-data.loading::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 110%;
-            height: 110%;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 999;
-            cursor: wait;
-        }
     </style>
     <div class="tournament-admin-data">
         <p>Sync/import players from this team from the CM API</p>

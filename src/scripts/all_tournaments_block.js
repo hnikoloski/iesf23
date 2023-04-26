@@ -23,8 +23,6 @@ jQuery(document).ready(function ($) {
             $this.data('select2').$dropdown.find(':input.select2-search__field').attr('placeholder', 'Search...');
         });
 
-
-
         $('.iesf-all-tournaments-block .countdown').each(function () {
             let $this = $(this);
             let $date = $this.attr('data-time');
@@ -58,7 +56,7 @@ jQuery(document).ready(function ($) {
             let $country = $this.find('input[name="filter_country"]').val();
             let showPastTournaments = $this.find('input[name="show_past_tournaments"]').val();
             let $filter_page = $this.find('input[name="filter_page"]').val();
-
+            $('.iesf-all-tournaments-block .tournament-results').addClass('loading');
             let $data = {
                 region: $region,
                 game: $game,
@@ -73,8 +71,8 @@ jQuery(document).ready(function ($) {
                 if (response.data.status == 404) {
                     $('.iesf-all-tournaments-block .tournament-results').html('<p class="no-results">No results found</p>');
                     return;
-
                 }
+                $('.iesf-all-tournaments-block .pagination').remove();
 
                 let tournaments = response.data;
                 let tournamentsMarkup = '';
@@ -117,8 +115,10 @@ jQuery(document).ready(function ($) {
                         }, 1000);
                     }
                 });
-            }
-            )
+            }).then(() => {
+                let currentPageVal = $('.iesf-all-tournaments-block .filter-vals input[name="filter_page"]').val();
+                console.log(currentPageVal);
+            })
                 .then(() => {
                     $('.iesf-all-tournaments-block .pagination .page-item a').on('click', function (e) {
                         e.preventDefault();
@@ -126,14 +126,32 @@ jQuery(document).ready(function ($) {
                         $('.iesf-all-tournaments-block .pagination .page-item a').removeClass('active');
                         $this.addClass('active');
 
+                        let $page = $this.attr('href');
+                        $('.iesf-all-tournaments-block .filter-vals input[name="filter_page"]').val($page);
+                        $('.iesf-all-tournaments-block .filter-vals').trigger('submit');
+
+                        // scroll to .iesf-all-tournaments-block .tournament-filter
+                        $('html, body').animate({
+                            scrollTop: $('.iesf-all-tournaments-block .tournament-filter').offset().top - 100
+                        }, 200);
+                    })
+                }).then(() => {
+                    let currentPageVal = $('.iesf-all-tournaments-block .filter-vals input[name="filter_page"]').val();
+                    $('.iesf-all-tournaments-block .pagination .page-item a').each(function () {
+                        let $this = $(this);
+                        let $page = $this.attr('href');
+                        if ($page == currentPageVal) {
+                            $this.addClass('active');
+                        }
                     })
                 })
                 .then(() => {
                     $this.removeClass('loading');
+                    $('.iesf-all-tournaments-block .tournament-results').removeClass('loading');
                 })
                 .catch(function (error) {
                     console.log(error);
-                });
+                })
 
         });
 

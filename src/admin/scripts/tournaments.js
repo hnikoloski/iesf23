@@ -46,7 +46,7 @@ jQuery(document).ready(function ($) {
         $(this).addClass('loading');
         let cm_pw = $('.tournament-admin-data #cm_pw').val();
         let tournament_id = $('.tournament-admin-data #tournament_id_hidden').val();
-
+        $('.tournament-admin-data').addClass('loading');
         axios.get(api_url, {
             params: {
                 cm_pw: cm_pw,
@@ -94,18 +94,8 @@ jQuery(document).ready(function ($) {
                         clearInterval(loadBarInterval);
                     }
                 }, timeForLoadBar / 300);
-
-
-
-
-
-
-
-
-
-
-
-
+            }).then(() => {
+                $('.tournament-admin-data').removeClass('loading');
             })
             .catch(function (error) {
                 console.log(error.message);

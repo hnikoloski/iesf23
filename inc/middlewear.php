@@ -158,9 +158,9 @@ function iesf_tournaments($request)
 
     if (isset($body)) {
         // Get the gameTitle from the body
-        // if ($body->tournament->id == null) {
-        //     return new WP_Error('tournament_id_error', 'Tournament ID is incorrect', array('status' => 500));
-        // }
+        if ($body->tournament->id == null) {
+            return new WP_Error('tournament_id_error', 'Tournament ID is incorrect', array('status' => 500));
+        }
 
         $countriesArr = array();
         foreach ($body->tournament->countries as $country) {
@@ -636,7 +636,7 @@ function iesf_tournaments_posts($request)
     );
 
     if ($page) {
-        $args['offset'] = $page * 6;
+        $args['offset'] = ($page - 1) * 6;
     }
 
     if ($region && $region != '*') {
