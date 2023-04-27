@@ -44,7 +44,15 @@ $current_page_id = get_the_ID();
             </div>
             <div class="tabs-tab-content">
                 <div class="tabs-tab-content-item ">
-                    GRUP STEJDZ
+                    Brackets:
+
+                    <code>
+                        <?php
+                        echo '<pre>';
+                        var_dump(get_field('brackets'));
+                        echo '</pre>';
+                        ?>
+                    </code>
                 </div>
                 <?php if (get_field('description')) : ?>
                     <div class="tabs-tab-content-item">

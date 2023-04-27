@@ -586,7 +586,7 @@
         },
         {
             "key": "field_64499082d219b",
-            "label": "Brackets",
+            "label": "Brackets_Json",
             "name": "brackets",
             "aria-label": "",
             "type": "text",
@@ -603,6 +603,188 @@
             "placeholder": "",
             "prepend": "",
             "append": ""
+        },
+        {
+            "key": "field_644a88419dcb5",
+            "label": "Brackets",
+            "name": "brackets_repeater",
+            "aria-label": "",
+            "type": "repeater",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "layout": "table",
+            "pagination": 0,
+            "min": 0,
+            "max": 0,
+            "collapsed": "",
+            "button_label": "Add Round",
+            "rows_per_page": 20,
+            "sub_fields": [
+                {
+                    "key": "field_644a9007bb4ae",
+                    "label": "round",
+                    "name": "round",
+                    "aria-label": "",
+                    "type": "text",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "10",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "maxlength": "",
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": "",
+                    "parent_repeater": "field_644a88419dcb5"
+                },
+                {
+                    "key": "field_644a8a7c31499",
+                    "label": "Match Games",
+                    "name": "match_games",
+                    "aria-label": "",
+                    "type": "repeater",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "90",
+                        "class": "",
+                        "id": ""
+                    },
+                    "layout": "block",
+                    "min": 0,
+                    "max": 0,
+                    "collapsed": "",
+                    "button_label": "Add Row",
+                    "rows_per_page": 20,
+                    "sub_fields": [
+                        {
+                            "key": "field_644a8ae03149a",
+                            "label": "Match Series Id",
+                            "name": "match_series_id",
+                            "aria-label": "",
+                            "type": "text",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "100",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "maxlength": "",
+                            "placeholder": "",
+                            "prepend": "",
+                            "append": "",
+                            "parent_repeater": "field_644a8a7c31499"
+                        },
+                        {
+                            "key": "field_644a8af93149b",
+                            "label": "Single Team",
+                            "name": "single_team_1",
+                            "aria-label": "",
+                            "type": "relationship",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "80",
+                                "class": "",
+                                "id": ""
+                            },
+                            "post_type": [
+                                "teams"
+                            ],
+                            "taxonomy": "",
+                            "filters": "",
+                            "return_format": "object",
+                            "min": "",
+                            "max": "",
+                            "elements": "",
+                            "parent_repeater": "field_644a8a7c31499"
+                        },
+                        {
+                            "key": "field_644a8b5e3149d",
+                            "label": "Score",
+                            "name": "team_score_1",
+                            "aria-label": "",
+                            "type": "text",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "20",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "maxlength": "",
+                            "placeholder": "",
+                            "prepend": "",
+                            "append": "",
+                            "parent_repeater": "field_644a8a7c31499"
+                        },
+                        {
+                            "key": "field_644a8b573149c",
+                            "label": "Single Team",
+                            "name": "single_team_2",
+                            "aria-label": "",
+                            "type": "relationship",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "80",
+                                "class": "",
+                                "id": ""
+                            },
+                            "post_type": [
+                                "teams"
+                            ],
+                            "taxonomy": "",
+                            "filters": "",
+                            "return_format": "object",
+                            "min": "",
+                            "max": "",
+                            "elements": "",
+                            "parent_repeater": "field_644a8a7c31499"
+                        },
+                        {
+                            "key": "field_644a8b703149e",
+                            "label": "Score",
+                            "name": "team_score_2",
+                            "aria-label": "",
+                            "type": "text",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "20",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "maxlength": "",
+                            "placeholder": "",
+                            "prepend": "",
+                            "append": "",
+                            "parent_repeater": "field_644a8a7c31499"
+                        }
+                    ],
+                    "parent_repeater": "field_644a88419dcb5"
+                }
+            ]
         },
         {
             "key": "field_6446892fd7fc3",
@@ -660,5 +842,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1682542729
+    "modified": 1682608160
 }

@@ -951,14 +951,137 @@ function iesf_tournaments_import_groups($request)
             'status' => 400,
         ];
     }
-
+    $headers = array(
+        'Authorization' => 'Bearer ' . $bearer,
+        'Content-Type' => 'application/json',
+        'Accept' => 'application/json',
+    );
     if (get_option('cm_options')['cm_api_password'] != $cm_pw) {
         return new WP_Error('cm_pw_error', 'Challenger Mode API password is incorrect', array('status' => 500));
     }
     $groupsData = get_field('groups', $post_id);
     $bracketsData = get_field('brackets', $post_id);
+    // If bracketsData is a string, it's a JSON string, so decode it
+    if (is_string($bracketsData)) {
+        $bracketsData = json_decode($bracketsData);
+    }
 
-    print_r(json_encode($groupsData));
+    $bracketRounds = array();
+    foreach ($bracketsData as $bracket) {
+        foreach ($bracket->rounds as $round) {
+            $roundIndex = $round->index + 1;
+            $matchSeriesIds = array();
+            foreach ($round->matchSeriesIds as $matchSeries) {
+                array_push($matchSeriesIds, $matchSeries);
+            }
+            $bracketRounds[] = array(
+                'round' => $roundIndex,
+                'matchSeriesIds' => $matchSeriesIds,
+            );
+        }
+    }
+    // Clear all brackets_repeater and its sub fields
+    update_field('brackets_repeater', array(), $post_id);
+
+
+    foreach ($bracketRounds as $braRound) {
+        // Add repeater row for each round
+        $brackets_repeater_row = array(
+            'round' => $braRound['round'],
+            'match_games' => array(), // Initialize with an empty array
+        );
+        $brackets_repeater_row_id = add_row('brackets_repeater', $brackets_repeater_row, $post_id);
+    }
+    if (have_rows('brackets_repeater', $post_id)) {
+        while (have_rows('brackets_repeater', $post_id)) {
+            the_row();
+            $rowIndex = get_row_index();
+            foreach ($bracketRounds as $braRound) {
+
+                if ($braRound['round'] == $rowIndex) {
+                    foreach ($braRound['matchSeriesIds'] as $singleMatch) {
+                        add_sub_row('match_games', array(
+                            'match_series_id' => $singleMatch,
+                        ), $post_id);
+
+                        // /v1/tournaments/match_series/{id}
+                        $matchSeriesUrl = CM_API_URL . 'tournaments/match_series/' . $singleMatch;
+
+                        $matchSeriesResponse = wp_remote_get($matchSeriesUrl, array(
+                            'headers' => $headers,
+                        ));
+
+                        $matchSeriesBody = json_decode(wp_remote_retrieve_body($matchSeriesResponse));
+
+                        $lineups = $matchSeriesBody->lineups;
+                        $team1 = array(
+                            'lineupId' => $lineups[0]->lineupId,
+                            'score' => $lineups[0]->score,
+                        );
+                        $team2 = array(
+                            'lineupId' => $lineups[1]->lineupId,
+                            'score' => $lineups[1]->score,
+                        );
+                        var_dump($team1);
+                        die();
+
+                        // Find the post of post type 'teams' with the acf field team_id same as $team1['lineupId'] and get the ID of the post so we update the 'single_team_1' repeater
+                        $args = array(
+                            'post_type' => 'teams',
+                            'posts_per_page' => -1,
+                            'meta_query' => array(
+                                array(
+                                    'key' => 'team_id',
+                                    'value' => $team1['lineupId'],
+                                    'compare' => '=',
+                                ),
+                            ),
+                        );
+
+                        $query = new WP_Query($args);
+
+                        if ($query->have_posts()) {
+                            while ($query->have_posts()) {
+                                $query->the_post();
+                                $team1['team_id'] = get_the_ID();
+                            }
+                        }
+                        wp_reset_postdata();
+
+                        // Find the post of post type 'teams' with the acf field team_id same as $team2['lineupId'] and get the ID of the post so we update the 'single_team_2' repeater
+                        $args = array(
+                            'post_type' => 'teams',
+                            'posts_per_page' => -1,
+                            'meta_query' => array(
+                                array(
+                                    'key' => 'team_id',
+                                    'value' => $team2['lineupId'],
+                                    'compare' => '=',
+                                ),
+                            ),
+                        );
+
+                        $query = new WP_Query($args);
+
+                        if ($query->have_posts()) {
+                            while ($query->have_posts()) {
+                                $query->the_post();
+                                $team2['team_id'] = get_the_ID();
+                            }
+                        }
+                        wp_reset_postdata();
+
+                        // var_dump($team1);
+                        // var_dump($team2);
+                        print_r(json_encode($matchSeriesBody));
+                        die();
+                    }
+                }
+            }
+        }
+    }
+
+    print_r(json_encode($bracketRounds));
     die();
 }
 
@@ -1061,7 +1184,15 @@ function iesf_contact_form($request)
 
     $subjectAdmin = 'New message from IESF contact form';
 
-    wp_mail($toAdmin, $subjectAdmin, $messageToAdmin, $headersAdmin);
+    // wp_mail($toAdmin, $subjectAdmin, $messageToAdmin, $headersAdmin);
+    // Check if email sent successfully
+    if (!wp_mail($toAdmin, $subjectAdmin, $messageToAdmin, $headersAdmin)) {
+        return [
+            'message' => 'Something went wrong. Please try again later',
+            'error' => true,
+            'status' => 500,
+        ];
+    }
 
     return [
         'message' => 'Message sent successfully',
