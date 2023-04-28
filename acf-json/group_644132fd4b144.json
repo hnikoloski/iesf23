@@ -566,7 +566,7 @@
         },
         {
             "key": "field_64498ef07ef9c",
-            "label": "Groups",
+            "label": "Groups Json",
             "name": "groups",
             "aria-label": "",
             "type": "text",
@@ -583,6 +583,222 @@
             "placeholder": "",
             "prepend": "",
             "append": ""
+        },
+        {
+            "key": "field_644bf8eea67aa",
+            "label": "Groups Repeater",
+            "name": "groups_repeater",
+            "aria-label": "",
+            "type": "repeater",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "layout": "table",
+            "pagination": 0,
+            "min": 0,
+            "max": 0,
+            "collapsed": "",
+            "button_label": "Add Row",
+            "rows_per_page": 20,
+            "sub_fields": [
+                {
+                    "key": "field_644bfd165f042",
+                    "label": "Group Name",
+                    "name": "group_name",
+                    "aria-label": "",
+                    "type": "text",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "10",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "maxlength": "",
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": "",
+                    "parent_repeater": "field_644bf8eea67aa"
+                },
+                {
+                    "key": "field_644bfc3ea67ab",
+                    "label": "Group Teams",
+                    "name": "group_teams",
+                    "aria-label": "",
+                    "type": "repeater",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "90",
+                        "class": "",
+                        "id": ""
+                    },
+                    "layout": "block",
+                    "min": 0,
+                    "max": 0,
+                    "collapsed": "",
+                    "button_label": "Add Row",
+                    "rows_per_page": 20,
+                    "sub_fields": [
+                        {
+                            "key": "field_644bfc72a67ac",
+                            "label": "Team Name",
+                            "name": "team_name",
+                            "aria-label": "",
+                            "type": "text",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "30",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "maxlength": "",
+                            "placeholder": "",
+                            "prepend": "",
+                            "append": "",
+                            "parent_repeater": "field_644bfc3ea67ab"
+                        },
+                        {
+                            "key": "field_644bfc7fa67ad",
+                            "label": "Games Played",
+                            "name": "gamesPlayedCount",
+                            "aria-label": "",
+                            "type": "text",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "30",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "maxlength": "",
+                            "placeholder": "",
+                            "prepend": "",
+                            "append": "",
+                            "parent_repeater": "field_644bfc3ea67ab"
+                        },
+                        {
+                            "key": "field_644bfc86a67ae",
+                            "label": "Score",
+                            "name": "score",
+                            "aria-label": "",
+                            "type": "text",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "30",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "maxlength": "",
+                            "placeholder": "",
+                            "prepend": "",
+                            "append": "",
+                            "parent_repeater": "field_644bfc3ea67ab"
+                        },
+                        {
+                            "key": "field_644bfc8fa67af",
+                            "label": "Games Won",
+                            "name": "gamesWon",
+                            "aria-label": "",
+                            "type": "text",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "30",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "maxlength": "",
+                            "placeholder": "",
+                            "prepend": "",
+                            "append": "",
+                            "parent_repeater": "field_644bfc3ea67ab"
+                        },
+                        {
+                            "key": "field_644bfc9ba67b0",
+                            "label": "Games Tied",
+                            "name": "gamesTied",
+                            "aria-label": "",
+                            "type": "text",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "30",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "maxlength": "",
+                            "placeholder": "",
+                            "prepend": "",
+                            "append": "",
+                            "parent_repeater": "field_644bfc3ea67ab"
+                        },
+                        {
+                            "key": "field_644bfca6a67b1",
+                            "label": "Mutual Meetings",
+                            "name": "mutualMeetings",
+                            "aria-label": "",
+                            "type": "text",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "30",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "maxlength": "",
+                            "placeholder": "",
+                            "prepend": "",
+                            "append": "",
+                            "parent_repeater": "field_644bfc3ea67ab"
+                        },
+                        {
+                            "key": "field_644bfcb1a67b2",
+                            "label": "Tiebreaker",
+                            "name": "tiebreaker",
+                            "aria-label": "",
+                            "type": "text",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "30",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "maxlength": "",
+                            "placeholder": "",
+                            "prepend": "",
+                            "append": "",
+                            "parent_repeater": "field_644bfc3ea67ab"
+                        }
+                    ],
+                    "parent_repeater": "field_644bf8eea67aa"
+                }
+            ]
         },
         {
             "key": "field_64499082d219b",
@@ -667,6 +883,7 @@
                     "collapsed": "",
                     "button_label": "Add Row",
                     "rows_per_page": 20,
+                    "parent_repeater": "field_644a88419dcb5",
                     "sub_fields": [
                         {
                             "key": "field_644a8ae03149a",
@@ -781,8 +998,7 @@
                             "append": "",
                             "parent_repeater": "field_644a8a7c31499"
                         }
-                    ],
-                    "parent_repeater": "field_644a88419dcb5"
+                    ]
                 }
             ]
         },
@@ -842,5 +1058,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1682608160
+    "modified": 1682707234
 }

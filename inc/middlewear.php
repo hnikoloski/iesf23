@@ -168,10 +168,7 @@ function iesf_tournaments($request)
 
     $secondBody = json_decode(wp_remote_retrieve_body($secondRequest));
 
-
     if (isset($body)) {
-        // var_dump($body);
-        // die();
         // Get the gameTitle from the body
         if ($body->tournament->id == null) {
             return new WP_Error('tournament_id_error', 'Tournament ID is incorrect', array('status' => 500));
@@ -409,15 +406,16 @@ function iesf_tournaments($request)
         if ($body->groups) {
             update_field('groups', $body->groups, $tournamentPost);
             $tournamentData['groups'] = $body->groups;
-
-            $groupsData = $tournamentData['groups'];
+            $groupsData = $body->groups;
+        } else {
+            if ($body->brackets) {
+                update_field('brackets', $body->brackets, $tournamentPost);
+                $tournamentData['brackets'] = $body->brackets;
+                $bracketsData = $tournamentData['brackets'];
+            }
         }
 
-        if ($body->brackets) {
-            update_field('brackets', $body->brackets, $tournamentPost);
-            $tournamentData['brackets'] = $body->brackets;
-            $bracketsData = $tournamentData['brackets'];
-        }
+
 
         if ($body->lineups) {
             $lineUpIds = $body->lineups;
@@ -444,11 +442,13 @@ function iesf_tournaments($request)
         if (isset($bracketsData)) {
             create_brackets_data($bracketsData, $tournamentPost, $headers);
         }
+
         if (isset($groupsData)) {
             create_groups_data($groupsData, $tournamentPost);
         }
-        return $body;
-        // return $tournamentData;
+
+        // return $body;
+        return $tournamentData;
     } else {
         return new WP_Error('token_error', 'Token error', array('status' => 500));
     }
@@ -585,6 +585,80 @@ function create_lineup_teams($ids, $membersData, $tournamentPost)
     // }
 }
 
+function create_groups_data($groupsData, $tournamentPost)
+{
+    $charsRange = range('A', 'Z');
+    $groupsDataCount = count($groupsData);
+    $groupsRdyData = array();
+
+
+
+    for ($i = 0; $i < $groupsDataCount; $i++) {
+        $groupName = 'Group ' . $charsRange[$i];
+        foreach ($groupsData[$i]->standings as $standin) {
+            $teamId = get_team_post_id($standin->lineupId);
+            $gamesPlayedCount = $standin->gamesPlayedCount;
+            $score = $standin->score;
+            $gamesWon = $standin->gamesWon;
+            $gamesTied = $standin->gamesTied;
+            $mutualMeetings = $standin->mutualMeetings;
+            $tiebreaker = $standin->tiebreaker;
+
+            $groupsRdyData[$groupName][] = array(
+                'teamId' => $teamId,
+                'team_name' => get_the_title($teamId),
+                'gamesPlayedCount' => $gamesPlayedCount,
+                'score' => $score,
+                'gamesWon' => $gamesWon,
+                'gamesTied' => $gamesTied,
+                'mutualMeetings' => $mutualMeetings,
+                'tiebreaker' => $tiebreaker,
+            );
+        }
+    }
+
+    if (is_string($groupsRdyData)) {
+        $groupsRdyData = json_decode($groupsRdyData);
+    }
+    // Clear the groups repeater
+    update_field('groups_repeater', array(), $tournamentPost);
+
+    foreach ($groupsRdyData as $itemKey => $itemValue) {
+        $groupName = $itemKey;
+        $groupTeams = $itemValue;
+        add_row('groups_repeater', array('group_name' => $groupName), $tournamentPost);
+        foreach ($groupTeams as $grpRdyDataItem) {
+            add_sub_row('group_teams', array(), $tournamentPost);
+            $teamId = $grpRdyDataItem['teamId'];
+            $teamName = $grpRdyDataItem['team_name'];
+            $gamesPlayedCount = $grpRdyDataItem['gamesPlayedCount'];
+            $score = $grpRdyDataItem['score'];
+            $gamesWon = $grpRdyDataItem['gamesWon'];
+            $gamesTied = $grpRdyDataItem['gamesTied'];
+            $mutualMeetings = $grpRdyDataItem['mutualMeetings'];
+            $tiebreaker = $grpRdyDataItem['tiebreaker'];
+
+            $groupTeam = array(
+                'team_id' => $teamId,
+                'team_name' => $teamName,
+                'gamesPlayedCount' => $gamesPlayedCount,
+                'score' => $score,
+                'gamesWon' => $gamesWon,
+                'gamesTied' => $gamesTied,
+                'mutualMeetings' => $mutualMeetings,
+                'tiebreaker' => $tiebreaker,
+            );
+
+            // Add empty rows to the inner repeater 'group_teams'
+            while (have_rows('group_teams', $tournamentPost)) {
+                the_row();
+                add_sub_row('group_teams', array(), $tournamentPost);
+            }
+        }
+    }
+    // die();
+}
+
 function create_brackets_data($bracketsData, $tournamentPostId, $headers)
 {
     if (is_string($bracketsData)) {
@@ -612,7 +686,6 @@ function create_brackets_data($bracketsData, $tournamentPostId, $headers)
             );
         }
     }
-    // print_r(json_encode($bracketRounds));
     $num_of_rounds = count($bracketRounds);
 
     // Clear all brackets_repeater and its sub fields
@@ -662,9 +735,6 @@ function create_brackets_data($bracketsData, $tournamentPostId, $headers)
             }
         }
     }
-
-    // print_r(json_encode($bracketsData));
-    // die();
 }
 // Spaces
 function iesf_spaces($request)

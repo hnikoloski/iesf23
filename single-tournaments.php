@@ -29,6 +29,11 @@ $current_page_id = get_the_ID();
     <div class="content">
         <div class="tabs">
             <div class="tabs-tab-header">
+                <?php if (get_field('groups_repeater', $current_page_id)) : ?>
+                    <div class="tabs-tab-header-item active">
+                        <p>Groups</p>
+                    </div>
+                <?php endif; ?>
                 <?php if (get_field('brackets_repeater')) : ?>
                     <div class="tabs-tab-header-item ">
                         <p>Brackets</p>
@@ -44,6 +49,42 @@ $current_page_id = get_the_ID();
                 </div>
             </div>
             <div class="tabs-tab-content">
+                <?php if (get_field('groups_repeater', $current_page_id)) : ?>
+                    <div class="tabs-tab-content-item">
+                        <?php if (have_rows('groups_repeater')) : ?>
+                            <div class="group group-wrapper">
+                                <?php while (have_rows('groups_repeater')) : the_row(); ?>
+                                    <div class="group group-single">
+                                        <h4><?php the_sub_field('group_name'); ?></h4>
+                                        <table>
+                                            <thead>
+                                                <tr>
+                                                    <th>#</th>
+                                                    <th>Team</th>
+                                                    <th>MP</th>
+                                                </tr>
+                                            </thead>
+                                            <?php if (have_rows('group_teams')) : ?>
+                                                <tbody>
+                                                    <?php while (have_rows('group_teams')) : the_row(); ?>
+                                                        <tr>
+                                                            <td><?php echo get_row_index(); ?></td>
+                                                            <td><?php the_sub_field('team_name'); ?></td>
+                                                            <td><?php the_sub_field('gamesPlayedCount'); ?></td>
+                                                        </tr>
+                                                    <?php endwhile; ?>
+                                                </tbody>
+                                            <?php endif; ?>
+                                        </table>
+
+                                    </div>
+                                <?php
+                                endwhile; ?>
+                            </div>
+                        <?php
+                        endif; ?>
+                    </div>
+                <?php endif; ?>
                 <?php if (get_field('brackets_repeater', $current_page_id)) : ?>
                     <div class="tabs-tab-content-item">
                         <?php if (have_rows('brackets_repeater')) : ?>
