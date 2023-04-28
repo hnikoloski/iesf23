@@ -409,11 +409,14 @@ function iesf_tournaments($request)
         if ($body->groups) {
             update_field('groups', $body->groups, $tournamentPost);
             $tournamentData['groups'] = $body->groups;
+
+            $groupsData = $tournamentData['groups'];
         }
 
         if ($body->brackets) {
             update_field('brackets', $body->brackets, $tournamentPost);
             $tournamentData['brackets'] = $body->brackets;
+            $bracketsData = $tournamentData['brackets'];
         }
 
         if ($body->lineups) {
@@ -433,14 +436,19 @@ function iesf_tournaments($request)
                     'lineupId' => $lineupId,
                 ];
             }
-
             create_lineup_teams($lineUpIds, $membersData, $tournamentPost);
         }
 
         $tournamentData['wp_id'] = $tournamentPost;
 
-        // return $body;
-        return $tournamentData;
+        if (isset($bracketsData)) {
+            create_brackets_data($bracketsData, $tournamentPost, $headers);
+        }
+        if (isset($groupsData)) {
+            create_groups_data($groupsData, $tournamentPost);
+        }
+        return $body;
+        // return $tournamentData;
     } else {
         return new WP_Error('token_error', 'Token error', array('status' => 500));
     }
@@ -577,6 +585,87 @@ function create_lineup_teams($ids, $membersData, $tournamentPost)
     // }
 }
 
+function create_brackets_data($bracketsData, $tournamentPostId, $headers)
+{
+    if (is_string($bracketsData)) {
+        $bracketsData = json_decode($bracketsData);
+    }
+    $post_id = $tournamentPostId;
+
+    // Decode bracketsData if it's a string
+    if (is_string($bracketsData)) {
+        $bracketsData = json_decode($bracketsData);
+    }
+
+    // Create array of bracket rounds
+    $bracketRounds = array();
+    foreach ($bracketsData as $bracket) {
+        foreach ($bracket->rounds as $round) {
+            $roundIndex = $round->index + 1;
+            $matchSeriesIds = array();
+            foreach ($round->matchSeriesIds as $matchSeries) {
+                array_push($matchSeriesIds, $matchSeries);
+            }
+            $bracketRounds[] = array(
+                'round' => $roundIndex,
+                'matchSeriesIds' => $matchSeriesIds,
+            );
+        }
+    }
+    // print_r(json_encode($bracketRounds));
+    $num_of_rounds = count($bracketRounds);
+
+    // Clear all brackets_repeater and its sub fields
+    update_field('brackets_repeater', array(), $post_id);
+
+    // Create rows for each round
+    for ($i = 0; $i < $num_of_rounds; $i++) {
+        $bracket_round_row = add_row('brackets_repeater', array(
+            'round' => $bracketRounds[$i]['round'],
+        ), $post_id);
+    }
+
+    $brackets_repeater = get_field('brackets_repeater', $post_id);
+
+    if (have_rows('brackets_repeater', $post_id)) {
+        while (have_rows('brackets_repeater', $post_id)) {
+            the_row();
+
+            $subRepeaterSelector = 'match_games';
+            $rowIndex = get_row_index();
+            // Add rows for each matchSeriesId
+            $num_of_inner_rows = count($bracketRounds[$rowIndex - 1]['matchSeriesIds']);
+            for ($j = 0; $j < $num_of_inner_rows; $j++) {
+                $api_url = CM_API_URL . 'tournaments/match_series/' . $bracketRounds[$rowIndex - 1]['matchSeriesIds'][$j];
+                $matchRequest = wp_remote_get($api_url, array(
+                    'headers' => $headers,
+                ));
+                $matchData = json_decode(wp_remote_retrieve_body($matchRequest));
+                $linups = $matchData->lineups;
+
+                $team1 = get_team_post_id($linups[0]->lineupId);
+                $team2 = get_team_post_id($linups[1]->lineupId);
+                $team1Score = $linups[0]->score;
+                $team2Score = $linups[1]->score;
+
+                $match_series_row = add_sub_row($subRepeaterSelector, array(
+                    'match_series_id' => $bracketRounds[$rowIndex - 1]['matchSeriesIds'][$j],
+                    'single_team_1' => $team1,
+                    'team_score_1' => $team1Score,
+                    'single_team_2' => $team2,
+                    'team_score_2' => $team2Score,
+                ), $post_id, 'brackets_repeater_' . $rowIndex);
+
+                // Add small delay to not exceed API rate limit
+                $pauseTime = 2;
+                sleep($pauseTime);
+            }
+        }
+    }
+
+    // print_r(json_encode($bracketsData));
+    // die();
+}
 // Spaces
 function iesf_spaces($request)
 {
@@ -936,6 +1025,7 @@ function iesf_tournaments_import_groups($request)
     $post_id = $request['post_id'];
     $bearer = iesf_auth()['value'];
 
+    // Check for missing parameters
     if (!$cm_pw || !$tournament_id || !$post_id) {
         return [
             'message' => 'Missing parameters',
@@ -944,6 +1034,7 @@ function iesf_tournaments_import_groups($request)
         ];
     }
 
+    // Check if correct tournament
     if ($tournament_id != get_field('tournament_cm_id', $post_id)) {
         return [
             'message' => 'This is not the correct tournament',
@@ -951,21 +1042,29 @@ function iesf_tournaments_import_groups($request)
             'status' => 400,
         ];
     }
+
+    // Set headers for API request
     $headers = array(
         'Authorization' => 'Bearer ' . $bearer,
         'Content-Type' => 'application/json',
         'Accept' => 'application/json',
     );
+
+    // Check if API password is correct
     if (get_option('cm_options')['cm_api_password'] != $cm_pw) {
         return new WP_Error('cm_pw_error', 'Challenger Mode API password is incorrect', array('status' => 500));
     }
+
+    // Get brackets and groups data
     $groupsData = get_field('groups', $post_id);
     $bracketsData = get_field('brackets', $post_id);
-    // If bracketsData is a string, it's a JSON string, so decode it
+
+    // Decode bracketsData if it's a string
     if (is_string($bracketsData)) {
         $bracketsData = json_decode($bracketsData);
     }
 
+    // Create array of bracket rounds
     $bracketRounds = array();
     foreach ($bracketsData as $bracket) {
         foreach ($bracket->rounds as $round) {
@@ -980,39 +1079,38 @@ function iesf_tournaments_import_groups($request)
             );
         }
     }
+
     // Clear all brackets_repeater and its sub fields
     update_field('brackets_repeater', array(), $post_id);
 
-
+    // Add repeater row for each bracket round
     foreach ($bracketRounds as $braRound) {
-        // Add repeater row for each round
         $brackets_repeater_row = array(
             'round' => $braRound['round'],
-            'match_games' => array(), // Initialize with an empty array
+            'match_games' => array(),
         );
         $brackets_repeater_row_id = add_row('brackets_repeater', $brackets_repeater_row, $post_id);
     }
+    // Loop through brackets_repeater rows and add sub rows for match games
     if (have_rows('brackets_repeater', $post_id)) {
         while (have_rows('brackets_repeater', $post_id)) {
             the_row();
             $rowIndex = get_row_index();
             foreach ($bracketRounds as $braRound) {
-
                 if ($braRound['round'] == $rowIndex) {
+
                     foreach ($braRound['matchSeriesIds'] as $singleMatch) {
                         add_sub_row('match_games', array(
                             'match_series_id' => $singleMatch,
                         ), $post_id);
 
-                        // /v1/tournaments/match_series/{id}
+                        // Get match series data from API
                         $matchSeriesUrl = CM_API_URL . 'tournaments/match_series/' . $singleMatch;
-
                         $matchSeriesResponse = wp_remote_get($matchSeriesUrl, array(
                             'headers' => $headers,
                         ));
-
                         $matchSeriesBody = json_decode(wp_remote_retrieve_body($matchSeriesResponse));
-
+                        // Extract relevant data from match series body
                         $lineups = $matchSeriesBody->lineups;
                         $team1 = array(
                             'lineupId' => $lineups[0]->lineupId,
@@ -1022,70 +1120,59 @@ function iesf_tournaments_import_groups($request)
                             'lineupId' => $lineups[1]->lineupId,
                             'score' => $lineups[1]->score,
                         );
-                        var_dump($team1);
-                        die();
 
-                        // Find the post of post type 'teams' with the acf field team_id same as $team1['lineupId'] and get the ID of the post so we update the 'single_team_1' repeater
-                        $args = array(
-                            'post_type' => 'teams',
-                            'posts_per_page' => -1,
-                            'meta_query' => array(
-                                array(
-                                    'key' => 'team_id',
-                                    'value' => $team1['lineupId'],
-                                    'compare' => '=',
-                                ),
-                            ),
-                        );
+                        // Get post IDs for both teams
+                        $team1_post_id = get_team_post_id($team1['lineupId']);
+                        $team2_post_id = get_team_post_id($team2['lineupId']);
 
-                        $query = new WP_Query($args);
-
-                        if ($query->have_posts()) {
-                            while ($query->have_posts()) {
-                                $query->the_post();
-                                $team1['team_id'] = get_the_ID();
-                            }
-                        }
-                        wp_reset_postdata();
-
-                        // Find the post of post type 'teams' with the acf field team_id same as $team2['lineupId'] and get the ID of the post so we update the 'single_team_2' repeater
-                        $args = array(
-                            'post_type' => 'teams',
-                            'posts_per_page' => -1,
-                            'meta_query' => array(
-                                array(
-                                    'key' => 'team_id',
-                                    'value' => $team2['lineupId'],
-                                    'compare' => '=',
-                                ),
-                            ),
-                        );
-
-                        $query = new WP_Query($args);
-
-                        if ($query->have_posts()) {
-                            while ($query->have_posts()) {
-                                $query->the_post();
-                                $team2['team_id'] = get_the_ID();
-                            }
-                        }
-                        wp_reset_postdata();
-
-                        // var_dump($team1);
-                        // var_dump($team2);
-                        print_r(json_encode($matchSeriesBody));
-                        die();
+                        // Update match game data
+                        update_sub_row('match_games', $rowIndex, array(
+                            'single_team_1' => $team1_post_id,
+                            'team_score_1' => $team1['score'],
+                            'single_team_2' => $team2_post_id,
+                            'team_score_2' => $team2['score'],
+                        ), $post_id);
                     }
                 }
             }
         }
     }
 
-    print_r(json_encode($bracketRounds));
-    die();
+    return [
+        'message' => 'Groups and brackets imported successfully',
+        'error' => false,
+        'tournament_id' => $tournament_id,
+        'tournament_name' => get_the_title($post_id),
+        'post_id' => $post_id,
+        'status' => 200,
+    ];
 }
 
 
+function get_team_post_id($team_id)
+{
+    $args = array(
+        'post_type' => 'teams',
+        'posts_per_page' => -1,
+        'meta_query' => array(
+            array(
+                'key' => 'team_id',
+                'value' => $team_id,
+                'compare' => '=',
+            ),
+        ),
+    );
+
+    $query = new WP_Query($args);
+
+    if ($query->have_posts()) {
+        while ($query->have_posts()) {
+            $query->the_post();
+            return get_the_ID();
+        }
+    }
+    wp_reset_postdata();
+}
 // contact form submission
 function iesf_contact_form($request)
 {

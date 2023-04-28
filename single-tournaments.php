@@ -29,10 +29,11 @@ $current_page_id = get_the_ID();
     <div class="content">
         <div class="tabs">
             <div class="tabs-tab-header">
-
-                <div class="tabs-tab-header-item ">
-                    <p>Group Stage</p>
-                </div>
+                <?php if (get_field('brackets_repeater')) : ?>
+                    <div class="tabs-tab-header-item ">
+                        <p>Brackets</p>
+                    </div>
+                <?php endif; ?>
                 <?php if (get_field('description')) : ?>
                     <div class="tabs-tab-header-item ">
                         <p>Description</p>
@@ -43,17 +44,104 @@ $current_page_id = get_the_ID();
                 </div>
             </div>
             <div class="tabs-tab-content">
-                <div class="tabs-tab-content-item ">
-                    Brackets:
+                <?php if (get_field('brackets_repeater', $current_page_id)) : ?>
+                    <div class="tabs-tab-content-item">
+                        <?php if (have_rows('brackets_repeater')) : ?>
 
-                    <code>
-                        <?php
-                        echo '<pre>';
-                        var_dump(get_field('brackets'));
-                        echo '</pre>';
-                        ?>
-                    </code>
-                </div>
+                            <div class="brackets brackets-row">
+                                <div class="theme theme-dark">
+                                    <div class="bracket">
+                                        <?php
+                                        while (have_rows('brackets_repeater')) :
+                                            the_row();
+                                            $rowIndex = get_row_index(); ?>
+                                            <div class="column round-<?php print_r($rowIndex); ?>">
+                                                <?php
+                                                while (have_rows('match_games')) : the_row();
+
+                                                    $single_team_1_title = get_sub_field('single_team_1'); // relationship field
+                                                    if ($single_team_1_title) {
+                                                        foreach ($single_team_1_title as $post) :
+                                                            setup_postdata($post);
+                                                            $single_team_1_title = get_the_title($post->ID);
+                                                            $post_1_id = $post->ID;
+                                                        endforeach;
+                                                    } else {
+                                                        $single_team_1_title = 'N/A';
+                                                        $post_1_id = '';
+                                                    }
+                                                    wp_reset_postdata();
+
+                                                    $single_team_2_title = get_sub_field('single_team_2'); // relationship field
+                                                    if ($single_team_2_title) {
+                                                        foreach ($single_team_2_title as $post) :
+                                                            setup_postdata($post);
+                                                            $single_team_2_title = get_the_title($post->ID);
+                                                            $post_2_id = $post->ID;
+                                                        endforeach;
+                                                    } else {
+                                                        $single_team_2_title = 'N/A';
+                                                        $post_2_id = '';
+                                                    }
+                                                    wp_reset_postdata();
+
+                                                    $team_score_1 = get_sub_field('team_score_1');
+                                                    $team_score_2 = get_sub_field('team_score_2');
+                                                    $single_team_1_logo = get_field('logo_s', $post_1_id) ? get_field('logo_s', $post_1_id) : get_template_directory_uri() . '/assets/images/placeholder_team.png';
+                                                    $single_team_2_logo = get_field('logo_s', $post_2_id) ? get_field('logo_s', $post_2_id) : get_template_directory_uri() . '/assets/images/placeholder_team.png';
+                                                    $winnerClass = '';
+                                                    if ($team_score_1 > $team_score_2) {
+                                                        $winnerClass = 'winner-top';
+                                                    } else {
+                                                        $winnerClass = 'winner-bottom';
+                                                    }
+                                                ?>
+
+                                                    <?php
+                                                    ?>
+                                                    <div class="match <?php echo $winnerClass; ?>">
+                                                        <div class="match-top team">
+                                                            <span class="image">
+                                                                <img src="<?php echo $single_team_1_logo; ?>" alt="<?php echo $single_team_1_title; ?>" class="full-size-img full-size-img-contain">
+                                                            </span>
+                                                            <span class="name">
+                                                                <?php echo $single_team_1_title; ?>
+                                                            </span>
+                                                            <span class="score">
+                                                                <?php echo $team_score_1; ?>
+                                                            </span>
+                                                        </div>
+                                                        <div class="match-bottom team">
+                                                            <span class="image">
+                                                                <img src="<?php echo $single_team_2_logo; ?>" alt="<?php echo $single_team_2_title; ?>" class="full-size-img full-size-img-contain">
+                                                            </span>
+                                                            <span class="name">
+                                                                <?php echo $single_team_2_title; ?>
+                                                            </span>
+                                                            <span class="score">
+                                                                <?php echo $team_score_2; ?>
+                                                            </span>
+                                                        </div>
+                                                        <div class="match-lines">
+                                                            <div class="line one"></div>
+                                                            <div class="line two"></div>
+                                                        </div>
+                                                        <div class="match-lines alt">
+                                                            <div class="line one"></div>
+                                                        </div>
+                                                    </div>
+                                                <?php endwhile; ?>
+                                            </div>
+                                        <?php endwhile; ?>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                        <?php endif; ?>
+                    </div>
+                <?php endif; ?>
+
                 <?php if (get_field('description')) : ?>
                     <div class="tabs-tab-content-item">
                         <?php
