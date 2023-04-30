@@ -585,6 +585,26 @@
             "append": ""
         },
         {
+            "key": "field_644eede2f2371",
+            "label": "tmp_groups_json",
+            "name": "tmp_groups_json",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "maxlength": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
             "key": "field_644bf8eea67aa",
             "label": "Groups Repeater",
             "name": "groups_repeater",
@@ -647,6 +667,7 @@
                     "collapsed": "",
                     "button_label": "Add Row",
                     "rows_per_page": 20,
+                    "parent_repeater": "field_644bf8eea67aa",
                     "sub_fields": [
                         {
                             "key": "field_644bfc72a67ac",
@@ -795,8 +816,7 @@
                             "append": "",
                             "parent_repeater": "field_644bfc3ea67ab"
                         }
-                    ],
-                    "parent_repeater": "field_644bf8eea67aa"
+                    ]
                 }
             ]
         },
@@ -1058,5 +1078,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1682707234
+    "modified": 1682894579
 }

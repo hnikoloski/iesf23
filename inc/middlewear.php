@@ -622,7 +622,8 @@ function create_groups_data($groupsData, $tournamentPost)
     }
     // Clear the groups repeater
     update_field('groups_repeater', array(), $tournamentPost);
-
+    // tmp_groups_json
+    update_field('tmp_groups_json', $groupsRdyData, $tournamentPost);
     foreach ($groupsRdyData as $itemKey => $itemValue) {
         $groupName = $itemKey;
         $groupTeams = $itemValue;

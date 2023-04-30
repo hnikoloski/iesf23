@@ -51,38 +51,67 @@ $current_page_id = get_the_ID();
             <div class="tabs-tab-content">
                 <?php if (get_field('groups_repeater', $current_page_id)) : ?>
                     <div class="tabs-tab-content-item">
-                        <?php if (have_rows('groups_repeater')) : ?>
-                            <div class="group group-wrapper">
-                                <?php while (have_rows('groups_repeater')) : the_row(); ?>
-                                    <div class="group group-single">
-                                        <h4><?php the_sub_field('group_name'); ?></h4>
-                                        <table>
-                                            <thead>
-                                                <tr>
-                                                    <th>#</th>
-                                                    <th>Team</th>
-                                                    <th>MP</th>
-                                                </tr>
-                                            </thead>
-                                            <?php if (have_rows('group_teams')) : ?>
-                                                <tbody>
-                                                    <?php while (have_rows('group_teams')) : the_row(); ?>
-                                                        <tr>
-                                                            <td><?php echo get_row_index(); ?></td>
-                                                            <td><?php the_sub_field('team_name'); ?></td>
-                                                            <td><?php the_sub_field('gamesPlayedCount'); ?></td>
-                                                        </tr>
-                                                    <?php endwhile; ?>
-                                                </tbody>
-                                            <?php endif; ?>
-                                        </table>
-
-                                    </div>
-                                <?php
-                                endwhile; ?>
-                            </div>
                         <?php
-                        endif; ?>
+                        $groupsTmpJson = get_field('tmp_groups_json', $current_page_id);
+                        ?>
+                        <div class="groups groups-data groups-all">
+                            <?php
+                            foreach ($groupsTmpJson as $key => $grp) {
+
+
+                            ?>
+                                <div class="groups-single">
+                                    <h3><?php echo $key; ?></h3>
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>Team</th>
+                                                <th>MP</th>
+                                                <th class="hidden">W</th>
+                                                <th class="hidden">D</th>
+                                                <th class="hidden">L</th>
+                                                <th class="hidden">H2H</th>
+                                                <!-- <th class="hidden">+/-</th> -->
+                                                <th class="text-right">PTS</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php
+                                            foreach ($grp as $key => $team) {
+                                                $teamName = $team['team_name'] ? $team['team_name'] : 'N/A';
+                                                $gamesPlayedCount = $team['gamesPlayedCount'] ? $team['gamesPlayedCount'] : '0';
+                                                $score = $team['score'] ? $team['score'] : '0';
+                                                $gamesWon = $team['gamesWon'] ? $team['gamesWon'] : '0';
+                                                $gamesTied = $team['gamesTied'] ? $team['gamesTied'] : '0';
+                                                $mutualMeetings = $team['mutualMeetings'] ? $team['mutualMeetings'] : '0';
+                                                $tiebreaker = $team['tiebreaker'] ? $team['tiebreaker'] : '0';
+                                            ?>
+                                                <tr>
+                                                    <td><?php echo $key + 1; ?></td>
+                                                    <td class="d-flex align-items-center">
+                                                        <div class="logo-wrapper">
+                                                            <img src="<?php echo get_field('logo_s', $team['teamId']) ? get_field('logo_s', $team['teamId']) : get_template_directory_uri() . '/assets/images/placeholder_team.png'; ?>" alt="<?php echo $teamName; ?>" class="logo" />
+                                                        </div><?php echo $teamName; ?>
+                                                    </td>
+                                                    <td><?php echo $gamesPlayedCount; ?></td>
+                                                    <td class="hidden"><?php echo $gamesWon; ?></td>
+                                                    <td class="hidden"><?php echo $gamesTied; ?></td>
+                                                    <td class="hidden"><?php echo $gamesPlayedCount - $gamesWon - $gamesTied; ?></td>
+                                                    <td class="hidden"><?php echo $mutualMeetings; ?></td>
+                                                    <!-- <td class="hidden"><?php echo $tiebreaker; ?></td> -->
+                                                    <td class="text-right"><?php echo $score; ?></td>
+                                                </tr>
+                                            <?php
+                                            }
+                                            ?>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            <?php
+                            }
+                            ?>
+                        </div>
                     </div>
                 <?php endif; ?>
                 <?php if (get_field('brackets_repeater', $current_page_id)) : ?>

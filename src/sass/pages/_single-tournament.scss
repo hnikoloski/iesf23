@@ -140,15 +140,72 @@ body.single-tournaments {
                   }
                 }
               }
-              .group {
-                &-wrapper {
+              .groups {
+                &-all {
                   display: flex;
                   flex-wrap: wrap;
+                  gap: 3.5rem;
                 }
                 &-single {
-                  flex: 0 0 50%;
-                  width: 50%;
+                  flex: 0 0 calc(100% - 0rem);
+                  width: calc(100% - 0rem);
                   padding: 1.5rem;
+                  @include borderRadius(0.8rem);
+                  background: $dblue;
+                  h3 {
+                    flex: 0 0 100%;
+                    width: 100%;
+                    margin-bottom: 1rem;
+                    padding: 1rem;
+                  }
+                  table {
+                    flex: 0 0 100%;
+                    width: 100%;
+                    thead {
+                      tr {
+                        border-bottom: 1px solid $teal;
+                      }
+                    }
+                    tr {
+                      &:not(:last-of-type) {
+                        border-bottom: 1px solid $teal;
+                      }
+                      td {
+                        padding: 1.5rem;
+                        vertical-align: middle;
+                        font-size: 1.8rem;
+                        &:first-of-type {
+                          flex: 0 0 6.4rem;
+                          width: 6.4rem;
+                          height: 6.4rem;
+                          margin-right: 1.5rem;
+                          overflow: hidden;
+                        }
+                        &:last-of-type {
+                          text-align: right;
+                        }
+                        .logo-wrapper {
+                          @include borderRadius(50%);
+                          overflow: hidden;
+                          width: 4rem;
+                          height: 4rem;
+                          margin-right: 1.5rem;
+                          img {
+                            @include fullSizeImg(cover);
+                          }
+                        }
+                      }
+                    }
+                    th {
+                      color: #fff;
+                      padding: 1.5rem;
+                      font-size: 1.6rem;
+                      font-weight: 500;
+                      opacity: 0.5;
+
+                      vertical-align: middle;
+                    }
+                  }
                 }
               }
             }
